@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Mantenimiento de Inventario Tecnológico</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-image: url('https://via.placeholder.com/1920x1080');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .inventory-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .inventory-container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            height: 50px;
+            border-radius: 5px;
+        }
+
+        .btn-register {
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            font-size: 18px;
+        }
+
+        .btn-register:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="inventory-container">
+        <h2>Registro de Mantenimiento de Inventario Tecnológico</h2>
+        <form>
+            <div class="form-group">
+                <label for="item-name">Nombre del Artículo</label>
+                <input type="text" class="form-control" id="item-name" placeholder="Ingrese el nombre del artículo">
+            </div>
+            <div class="form-group">
+                <label for="category">Categoría</label>
+                <select class="form-control" id="category">
+                    <option>Computadora</option>
+                    <option>Monitor</option>
+                    <option>Teclado</option>
+                    <option>Mouse</option>
+                    <option>Impresora</option>
+                    <option>Otro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="serial-number">Número de Serie</label>
+                <input type="text" class="form-control" id="serial-number" placeholder="Ingrese el número de serie">
+            </div>
+            <div class="form-group">
+                <label for="purchase-date">Fecha de Compra</label>
+                <input type="date" class="form-control" id="purchase-date">
+            </div>
+            <div class="form-group">
+                <label for="warranty-date">Fecha de Vencimiento de Garantía</label>
+                <input type="date" class="form-control" id="warranty-date">
+            </div>
+            <div class="form-group">
+                <label for="maintenance-date">Fecha de Último Mantenimiento</label>
+                <input type="date" class="form-control" id="maintenance-date">
+            </div>
+            <div class="form-group">
+                <label for="condition">Condición</label>
+                <select class="form-control" id="condition">
+                    <option>Nuevo</option>
+                    <option>Usado</option>
+                    <option>Necesita Reparación</option>
+                    <option>Obsoleto</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-register">Registrar Artículo</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

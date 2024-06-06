@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Vida de Equipos Tecnológicos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+        }
+        .card-body {
+            font-size: 16px;
+        }
+        .list-group-item {
+            border: none;
+            border-radius: 0;
+        }
+        .list-group-item:first-child {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .list-group-item:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .btn {
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="card">
+                    <div class="card-header">
+                        Hoja de Vida del Equipo
+                    </div>
+                    <div class="card-body">
+                        <!-- Formulario para crear o actualizar la hoja de vida -->
+                        <form id="hojaVidaForm">
+                            <div class="form-group">
+                                <label for="nombreEquipo">Nombre del Equipo:</label>
+                                <input type="text" class="form-control" id="nombreEquipo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion">Descripción:</label>
+                                <textarea class="form-control" id="descripcion" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaAdquisicion">Fecha de Adquisición:</label>
+                                <input type="date" class="form-control" id="fechaAdquisicion" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="estado">Estado:</label>
+                                <select class="form-control" id="estado" required>
+                                    <option value="Nuevo">Nuevo</option>
+                                    <option value="Usado">Usado</option>
+                                    <option value="Reparación">Reparación</option>
+                                    <option value="Descontinuado">Descontinuado</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                            <button type="button" class="btn btn-success" id="actualizarBtn" style="display: none;">Actualizar</button>
+                            <button type="button" class="btn btn-danger" id="cancelarBtn" style="display: none;">Cancelar</button>
+                        </form>
+                        <!-- Lista de equipos registrados -->
+                        <div id="listaEquipos" class="mt-4">
+                            <h5>Equipos Registrados</h5>
+                            <ul class="list-group">
+                                <!-- Aquí se mostrarán los equipos registrados dinámicamente -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Función para manejar el envío del formulario
+        document.getElementById("hojaVidaForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Evita que se recargue la página
+            const nombre = document.getElementById("nombreEquipo").value;
+            const descripcion = document.getElementById("descripcion").value;
+            const fecha = document.getElementById("fechaAdquisicion").value;
+            const estado = document.getElementById("estado").value;
+            if (nombre && descripcion && fecha && estado) {
+                // Aquí puedes enviar los datos a tu servidor para el registro o actualización
+                // Luego puedes actualizar la lista de equipos registrados y limpiar el formulario
+                // Por ahora, solo mostraremos un mensaje de alerta
+                alert("Registro exitoso");
+                document.getElementById("hojaVidaForm").reset(); // Limpiar el formulario
+            } else {
+                alert("Por favor completa todos los campos");
+            }
+        });
+
+        // Función para mostrar el formulario de actualización al hacer clic en el botón de actualizar
+        document.getElementById("actualizarBtn").addEventListener("click", function() {
+            // Aquí puedes implementar la lógica para cargar los datos del equipo en el formulario
+            // y cambiar el botón de "Registrar" a "Actualizar"
+            // Por ahora, simplemente mostraremos un mensaje de alerta
+            alert("Actualización exitosa");
+            document.getElementById("hojaVidaForm").reset(); // Limpiar el formulario
+            document.getElementById("actualizarBtn").style.display = "none";
+            document.getElementById("cancelarBtn").style.display = "none";
+        });
+    </script>
+</body>
+</html>

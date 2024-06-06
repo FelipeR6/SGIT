@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de Equipos Tecnológicos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-image: url('https://via.placeholder.com/1920x1080');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .inventory-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .inventory-container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        table.dataTable {
+            width: 100% !important;
+        }
+
+        table.dataTable thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        table.dataTable thead th {
+            border: none;
+        }
+
+        table.dataTable tbody tr {
+            background-color: #f9f9f9;
+        }
+
+        table.dataTable tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 0;
+            margin-left: 2px;
+            margin-right: 2px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #007bff;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="inventory-container">
+        <h2>Inventario de Equipos Tecnológicos</h2>
+        <table id="inventory-table" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Nombre del Equipo</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Número de Serie</th>
+                    <th>Fecha de Compra</th>
+                    <th>Garantía</th>
+                    <th>Último Mantenimiento</th>
+                    <th>Ubicación</th>
+                    <th>Estado</th>
+                    <th>Comentarios</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí irán los registros del inventario -->
+                <tr>
+                    <td>Equipo 1</td>
+                    <td>Marca A</td>
+                    <td>Modelo X</td>
+                    <td>12345</td>
+                    <td>2022-01-15</td>
+                    <td>2023-01-15</td>
+                    <td>2023-05-20</td>
+                    <td>Sala 1</td>
+                    <td>Operativo</td>
+                    <td>Ninguno</td>
+                </tr>
+                <tr>
+                    <td>Equipo 2</td>
+                    <td>Marca B</td>
+                    <td>Modelo Y</td>
+                    <td>67890</td>
+                    <td>2021-07-20</td>
+                    <td>2022-07-20</td>
+                    <td>2023-03-10</td>
+                    <td>Sala 2</td>
+                    <td>En Mantenimiento</td>
+                    <td>Requiere revisión</td>
+                </tr>
+                <!-- Agrega más registros según sea necesario -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#inventory-table').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+    </script>
+</body>
+</html>
