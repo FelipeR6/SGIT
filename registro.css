@@ -1,0 +1,76 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: "Arial", "Helvetica Neue", Helvetica, sans-serif;
+    overflow-x: hidden;
+    background: rgb(54, 0, 97);
+    background: linear-gradient(
+        90deg,
+        rgba(54, 0, 97, 1) 15%,
+        rgba(0, 68, 82, 1) 50%,
+        rgba(0, 133, 159, 1) 85%
+    );
+}
+
+.register-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    margin: auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; 
+}
+
+.register-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.form-group input {
+    height: 50px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.btn-register {
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    font-size: 18px;
+}
+
+.btn-register:hover {
+    background-color: #218838;
+}
+
+.already-registered {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #007bff;
+}
+
+.already-registered:hover {
+    text-decoration: underline;
+}
+
+.social-register {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.social-register .btn {
+    margin: 5px;
+    border-radius: 5px;
+}
