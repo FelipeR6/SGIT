@@ -1,0 +1,83 @@
+body {
+  font-family: "Arial", sans-serif;
+  overflow-x: hidden;
+  background: rgb(54, 0, 97);
+  background: linear-gradient(
+    90deg,
+    rgba(54, 0, 97, 1) 15%,
+    rgba(0, 68, 82, 1) 50%,
+    rgba(0, 133, 159, 1) 85%
+  );
+}
+
+.hero {
+  position: relative;
+  height: 100vh;
+  color: rgb(0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.hero img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.hero h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+.hero p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+.navbar-custom {
+  background-color: #007bff;
+}
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+  color: rgb(0, 0, 0);
+}
+.features {
+  padding: 4rem 0;
+}
+.features .feature {
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 10px;
+  transition: transform 0.4s ease-in-out;
+}
+.features .feature:hover {
+  transform: translateY(-10px);
+}
+.cta {
+  
+  padding: 3rem 0;
+  text-align: center;
+  background-color: rgb(255, 255, 255);
+}
+.cta h2 {
+  margin-bottom: 1rem;
+}
+.footer {
+  color: rgb(0, 0, 0);
+  padding: 2rem 0;
+  width: 100%;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  .hero p {
+    font-size: 1.2rem;
+  }
+}

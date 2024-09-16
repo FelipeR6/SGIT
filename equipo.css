@@ -1,0 +1,84 @@
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    background: 
+      linear-gradient(
+        90deg,
+        rgba(54, 0, 97, 0.8) 15%,
+        rgba(0, 68, 82, 0.8) 50%,
+        rgba(0, 133, 159, 0.8) 85%
+      ),
+      url('https://via.placeholder.com/1920x1080');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.inventory-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 100%;
+}
+
+.inventory-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.form-group input, .form-group select {
+    height: 50px;
+    border-radius: 5px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #007bff;  
+}
+
+.btn-register {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    font-size: 18px;
+    border: none; 
+    cursor: pointer;  
+}
+
+.btn-register:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 600px) {
+    .inventory-container {
+        padding: 20px;
+    }
+
+    .form-group input, .form-group select {
+        height: 45px;
+    }
+
+    .btn-register {
+        font-size: 16px;
+        padding: 8px;
+    }
+}
