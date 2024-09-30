@@ -1,0 +1,56 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: 
+      linear-gradient(
+        90deg,
+        rgba(54, 0, 97, 0.8) 15%,
+        rgba(0, 68, 82, 0.8) 50%,
+        rgba(0, 133, 159, 0.8) 85%
+      ),
+      url('https://via.placeholder.com/1920x1080');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+.inventory-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 100%;
+}
+
+.inventory-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.form-group input, .form-group select {
+    height: 50px;
+    border-radius: 5px;
+    width: 100%; 
+    box-sizing: border-box; 
+    padding: 10px; 
+}
+
+.btn-register {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    font-size: 18px;
+}
+
+.btn-register:hover {
+    background-color: #0056b3;
+}
