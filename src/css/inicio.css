@@ -1,0 +1,41 @@
+body {
+    font-family: "Arial", sans-serif;
+    overflow-x: hidden;
+    
+  }
+  .navbar {
+    margin-bottom: 20px;
+  }
+  
+  .card {
+    border-radius: 0.5rem;
+  }
+  
+  .card-header {
+    background-color: #17a2b8;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .card-body {
+    background-color: #ffffff;
+    border-top: 2px solid #17a2b8;
+  }
+  
+  .card-title {
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-button {
+    margin: 5px;
+  }
+  
+  .btn-outline-secondary {
+    color: #17a2b8;
+    border-color: #17a2b8;
+  }
+  
+  .btn-outline-secondary:hover {
+    background-color: #17a2b8;
+    color: white;
+  }
