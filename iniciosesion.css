@@ -7,21 +7,21 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
-.container {
-    max-width: 500px;
-    background-color: white;
+.card {
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    padding: 20px;
     transition: transform 0.3s;
 }
 
-.container:hover {
+.card:hover {
     transform: scale(1.02);
 }
 
-h1, h3 {
+.card-header {
+    background-color: #fff;
+    border-radius: 15px 15px 0 0;
     text-align: center;
+    font-size: 1.5rem;
     font-weight: 600;
     color: #6a11cb;
 }
@@ -38,11 +38,9 @@ h1, h3 {
 
 .btn-custom {
     background-color: #6a11cb;
-    color: white;
+    color: #fff;
     border-radius: 10px;
     transition: background-color 0.3s, transform 0.3s;
-    width: 100%;
-    margin-top: 10px;
 }
 
 .btn-custom:hover {
@@ -50,12 +48,38 @@ h1, h3 {
     transform: translateY(-2px);
 }
 
-.btn-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
+.btn-show-password {
+    background: none;
+    border: none;
+    color: #6a11cb;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
-.btn-group a {
-    width: 48%;
+.options {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.options a {
+    color: blueviolet;
+    transition: color 0.3s;
+}
+
+.options a:hover {
+    color: #2575fc;
+}
+
+.error {
+    color: red;
+    display: none;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    font-weight: bold;
+    color: blue;
 }

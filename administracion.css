@@ -1,21 +1,25 @@
 /* Estilos generales */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f7fc;
     color: #333;
+    padding-top: 150px;
 }
 
+/* Estilo del header */
 header {
     background-color: #3a2a7d; /* Color morado oscuro */
     color: white;
     padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombra para el header */
 }
 
 header .logo h1 {
     margin: 0;
     font-size: 2rem;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3); /* Sombra para el texto del logo */
 }
 
 header nav ul {
@@ -35,25 +39,28 @@ header nav ul li a {
     text-decoration: none;
     color: white;
     font-size: 1rem;
-    padding: 10px;
+    padding: 10px 15px; /* Aumentar el padding para mejor clicabilidad */
     border-radius: 5px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Añadir efecto de transformación */
 }
 
 header nav ul li a:hover {
     background-color: #2575fc; /* Azul brillante */
+    transform: scale(1.05); /* Efecto de aumento al pasar el mouse */
 }
 
 header nav ul li a.active {
     background-color: #2575fc;
 }
 
+/* Estilo del footer */
 footer {
     background-color: #3a2a7d;
     color: white;
     text-align: center;
     padding: 10px 0;
     margin-top: 30px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2); /* Sombra para el footer */
 }
 
 /* Estilos del panel de administración */
@@ -66,6 +73,7 @@ footer {
     font-size: 2.5rem;
     margin-bottom: 30px;
     color: #3a2a7d; /* Morado oscuro */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3); /* Sombra para el texto */
 }
 
 .stats {
@@ -80,6 +88,11 @@ footer {
     border-radius: 10px;
     width: 30%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease; /* Añadir efecto de transformación */
+}
+
+.stat:hover {
+    transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
 }
 
 .stat h3 {
@@ -94,6 +107,7 @@ footer {
     color: #3a2a7d; /* Morado oscuro */
 }
 
+/* Estilo de botones */
 button.cta-btn {
     background-color: #2575fc;
     color: white;
@@ -103,52 +117,60 @@ button.cta-btn {
     cursor: pointer;
     border: none;
     margin-bottom: 30px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Añadir efecto de transformación */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para el botón */
 }
 
 button.cta-btn:hover {
     background-color: #1d60c2; /* Azul más oscuro */
+    transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
 }
 
+/* Estilo de la tabla */
+/* Estilo de la tabla */
 table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Asegúrate de que la tabla ocupe el 100% del ancho */
+    max-width: 1200px; /* Ancho máximo para la tabla */
+    margin: 20px auto; /* Centrar la tabla y margen superior/inferior */
+    margin-bottom: 40px; /* Espacio adicional en la parte inferior de la tabla */
+    border-collapse: collapse; /* Colapsar bordes */
+    background-color: #ffffff; /* Color de fondo de la tabla */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para la tabla */
 }
 
 table th, table td {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid #ddd;
+    padding: 8px; /* Reducir el espaciado interno */
+    text-align: center; /* Alinear texto al centro */
+    border: 1px solid #ddd; /* Bordes de las celdas */
+    font-size: 0.9rem; /* Tamaño de fuente más pequeño */
 }
 
 table th {
-    background-color: #2575fc;
-    color: white;
-    font-size: 1.1rem;
+    background-color: #2575fc; /* Color de fondo de los encabezados */
+    color: white; /* Color del texto de los encabezados */
+    font-size: 1rem; /* Tamaño de fuente de los encabezados */
 }
 
 table tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.8); /* Color de fondo para filas pares */
 }
 
 table tr:hover {
-    background-color: rgba(240, 240, 240, 1);
+    background-color: rgba(240, 240, 240, 1); /* Color de fondo al pasar el mouse */
 }
 
 table button {
-    background-color: #2575fc;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: #2575fc; /* Color de fondo de los botones en la tabla */
+    color: white; /* Color del texto de los botones */
+    border: none; /* Sin borde */
+    padding: 6px 12px; /* Reducir el espaciado interno de los botones */
+    border-radius: 5px; /* Bordes redondeados para los botones */
+    cursor: pointer; /* Cambiar cursor al pasar sobre el botón */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Efecto de transición */
 }
 
 table button:hover {
-    background-color: #1d60c2;
+    background-color: #1d60c2; /* Color de fondo al pasar el mouse sobre el botón */
+    transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
 }

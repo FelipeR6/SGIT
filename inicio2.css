@@ -1,0 +1,263 @@
+/* Reset de márgenes y padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Asegurando que el html y body ocupen el 100% */
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+/* Estilo general */
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradiente entre morado y azul */
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px; /* Ajustado para mayor proporción */
+  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px; /* Mantener el padding lateral */
+}
+
+/* Logo */
+.logo img {
+  height: 50px;
+  cursor: pointer;
+}
+
+/* Estilo de navegación */
+nav {
+  display: flex;
+  align-items: center;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 20px; /* Ajustado para un espaciado más equilibrado */
+}
+
+.menu li a {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem; /* Ajustado para mejor proporción */
+  text-transform: uppercase;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.menu li a:hover {
+  background-color: #575affce;
+  color: #333;
+  transform: scale(1.05); /* Efecto de escalado más sutil */
+}
+
+/* Icono de menú */
+.menu-icon {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.menu-icon span {
+  height: 3px;
+  width: 25px;
+  background: white;
+  border-radius: 5px;
+}
+
+/* Menú desplegable (responsive) */
+#menu-toggle {
+  display: none;
+}
+
+#menu-toggle:checked + .menu-icon + nav .menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.9);
+  width: 200px;
+  padding: 20px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  header {
+    height: 70px; /* Reducido para pantallas pequeñas */
+  }
+
+  .main-content {
+    padding-top: 70px; /* Ajustar el padding para que no quede cubierto */
+  }
+
+  .menu {
+    display: none; /* Ocultar el menú por defecto en dispositivos pequeños */
+  }
+
+  .menu-icon {
+    display: flex; /* Mostrar el icono de menú */
+  }
+
+  #menu-toggle:checked + .menu-icon + nav .menu {
+    display: flex; /* Mostrar el menú al activar el checkbox */
+  }
+}
+
+/* Asegurando que el contenido principal tiene suficiente espacio */
+.main-content {
+  padding: 0 20px 400px; /* Ajustado para un espacio más razonable para el footer y padding lateral */
+  min-height: 100vh; /* Asegura que el contenido principal ocupe toda la pantalla */
+  box-sizing: border-box; /* Incluye el padding en el cálculo del tamaño */
+}
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh; /* Ajustado para una mejor proporción */
+  text-align: center;
+  padding: 20px; /* Padding interno */
+  background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradiente entre morado y azul */
+  margin-top: 1000px; /* Ajustado para que no quede cubierto por el header */
+  color: #fff; /* Color de texto blanco para mejor contraste */
+  position: relative; /* Para posicionar el pseudo-elemento */
+  width: 100%; /* Asegura que ocupe todo el ancho */
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4); /* Sombra oscura para mejorar la legibilidad */
+  z-index: 1; /* Asegura que el pseudo-elemento esté detrás del contenido */
+}
+
+.hero-content {
+  position: relative; /* Para que el contenido esté por encima del pseudo-elemento */
+  z-index: 2; /* Asegura que el contenido esté por encima del fondo */
+  padding: 20px; /* Añadir padding para un mejor espaciado interno */
+  max-width: 90%; /* Limitar el ancho del contenido a un porcentaje para ser más responsivo */
+  margin: 0 auto; /* Centrar el contenido */
+}
+
+.hero-content h1 {
+  font-size: 3.5rem; /* Ajustado para un tamaño más equilibrado */
+  margin-bottom: 15px; /* Ajustado para un espaciado más equilibrado */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Sombra para el texto */
+}
+
+.hero-content p {
+  font-size: 1.25rem; /* Ajustado para un tamaño más equilibrado */
+  margin-bottom: 30px;
+  line-height: 1.5; /* Mejora la legibilidad */
+  max-width: 600px; /* Limitar el ancho del texto */
+  margin-left: auto;
+  margin-right: auto; /* Centrar el texto */
+}
+
+.cta-buttons {
+  margin-top: 20px;
+}
+
+.cta-btn {
+  background-color: #6000fc; /* Color de fondo */
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 10px;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.cta-btn:hover {
+  background-color: #575aff; /* Color de fondo al pasar el mouse */
+  transform: scale(1.05); /* Efecto de escalado */
+}
+/* Cards Section */
+.cards-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Grid responsivo */
+  gap: 40px; /* Aumentado para un mejor espaciado entre tarjetas */
+  padding: 50px 20px; /* Ajustar el padding lateral si es necesario */
+  text-align: center;
+  width: 100%; /* Asegura que ocupe todo el ancho */
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Añadido 'ease' para suavizar la transición */
+  max-width: 100%; /* Asegura que la tarjeta no exceda el ancho de su contenedor */
+}
+
+.card h3 {
+  font-size: 1.6rem; /* Aumentado para mejor legibilidad */
+  margin-bottom: 15px; /* Ajustado para un espaciado más equilibrado */
+}
+
+.card p {
+  font-size: 1.2rem; /* Aumentado para mejor legibilidad */
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Efecto de desplazamiento más sutil */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); /* Sombra más suave */
+}
+
+.card-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 24px; /* Aumentado para un mejor clic */
+  background-color: #6000fc; /* Color de fondo más consistente */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Añadido 'ease' para suavizar la transición */
+}
+
+.card-link:hover {
+  background-color: #575aff; /* Color de fondo al pasar el mouse */
+  transform: scale(1.05); /* Efecto de escalado más sutil */
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 30px 0; /* Aumentado para un mejor espaciado */
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white; /* Asegurarse de que el texto sea legible */
+  width: 100%; /* Asegura que el footer ocupe todo el ancho */
+}
+
+.spacer {
+  height: 1000px; /* Igual a la altura del header */
+}
