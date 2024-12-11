@@ -8,7 +8,7 @@
 /* Estilos generales */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Degradado entre morado y azul */
     color: #fff;
     overflow-x: hidden;
     line-height: 1.6;
@@ -24,7 +24,7 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semi-transparente */
     z-index: 1000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
@@ -58,89 +58,79 @@ nav ul li a:hover {
     color: #FFD700;
 }
 
-nav ul li a.active {
-    color: #FFD700;
+nav ul li a:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #FFD700;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
 }
 
-/* Perfil */
-.profile {
-    padding: 100px 20px 20px;
+nav ul li a:hover:before {
+    transform: scaleX(1);
+}
+
+/* Sección Principal */
+section {
+    padding: 80px 20px;
     text-align: center;
 }
 
-.profile-header {
-    margin-bottom: 40px;
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
 }
 
-.profile-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    margin-bottom: 20px;
-}
-
-.profile-header h2 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
-
-.profile-header p {
-    font-size: 1.2rem;
-    color: #FFD700;
-}
-
-.profile-info {
-    margin-bottom: 40px;
-}
-
-.profile-info h3 {
+h3 {
     font-size: 1.8rem;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
-.form-group {
-    margin-bottom: 20px;
-}
-
-label {
-    font-size: 1.1rem;
-    display: block;
-    margin-bottom: 5px;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: 2px solid #fff;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    margin-bottom: 10px;
-}
-
-input:disabled {
-    background-color: rgba(255, 255, 255, 0.3);
-}
-
-button.cta-btn {
-    background-color: #2575fc;
+/* Botones */
+button {
+    background-color: #6a11cb;
     color: white;
     border: none;
     padding: 12px 30px;
     font-size: 1rem;
     cursor: pointer;
     border-radius: 5px;
-    margin-top: 10px;
+    margin: 10px;
     transition: background-color 0.3s ease;
 }
 
-button.cta-btn:hover {
-    background-color: #6a11cb;
+button:hover {
+    background-color: #2575fc;
 }
 
-/* Tabla de historial de préstamos */
+button:active {
+    transform: scale(0.98);
+}
+
+/* Formulario */
+input[type="date"],
+select {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    width: 250px;
+    border: 2px solid #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    margin-bottom: 20px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="date"]:focus,
+select:focus {
+    border-color: #FFD700;
+}
+
+/* Tabla */
 table {
     width: 100%;
     margin-top: 30px;
@@ -165,6 +155,32 @@ table tr:nth-child(even) {
 
 table tr:hover {
     background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    .device-select, .date-input {
+        width: 90%;
+    }
+
+    button {
+        width: 90%;
+        padding: 10px;
+    }
 }
 
 /* Footer */

@@ -1,26 +1,128 @@
-body {
-    background-color: #0056b3;
-    background: linear-gradient(
-        90deg,
-        rgba(54, 0, 97, 1) 15%,
-        rgba(0, 68, 82, 1) 50%,
-        rgba(0, 133, 159, 1) 85%
-    );
-}
-.container {
-    margin-top: 50px;
-    max-width: 600px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-}
-.form-group label {
-    font-weight: bold;
-}
-.btn-primary {
-    background-color: #007bff;
-    border: none;
-    font-family: "Arial", sans-serif;
+/* Reset de márgenes y padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+/* Estilo general */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #4A00E0, #0000FF); /* Gradiente entre morado y azul */
+    color: #fff;
+    overflow-x: hidden;
+}
+
+header {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semi-transparente */
+}
+
+header .logo h1 {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #FFD700; /* Color dorado al pasar el mouse */
+}
+
+.loan {
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.loan h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.device-selection, .loan-dates {
+    margin-bottom: 30px;
+}
+
+.device-select {
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    width: 250px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.device-select:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.date-input {
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    width: 200px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    margin: 10px;
+}
+
+.loan-action {
+    margin-top: 30px;
+}
+
+.cta-btn {
+    background-color: #0000FF;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+    transition: background-color 0.3s;
+}
+
+.cta-btn:hover {
+    background-color: #3333FF;
+}
+
+.cancel-btn {
+    background-color: #FF5733; /* Rojo para cancelar */
+}
+
+.cancel-btn:hover {
+    background-color: #FF2A00;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: rgba(0, 0, 0, 0.7);
+}

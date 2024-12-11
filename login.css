@@ -1,69 +1,85 @@
-body, html {
-    height: 100%;
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #0056b3;
-    background: linear-gradient(
-        90deg,
-        rgba(54, 0, 97, 1) 15%,
-        rgba(0, 68, 82, 1) 50%,
-        rgba(0, 133, 159, 1) 85%
-    );
-    background-size: cover;
+body {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    font-family: 'Poppins', sans-serif;
 }
 
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+}
 
+.card:hover {
+    transform: scale(1.02);
+}
 
-.login-container h2 {
-    margin-bottom: 20px;
+.card-header {
+    background-color: #fff;
+    border-radius: 15px 15px 0 0;
     text-align: center;
-    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #6a11cb;
 }
 
-.form-group input {
-    height: 50px;
-    border-radius: 5px;
-    border: 1px solid #ddd; 
-    padding: 0 10px; 
+.form-control {
+    border-radius: 10px;
+    transition: border-color 0.3s;
 }
 
-.btn-login {
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    padding: 10px;
-    width: 100%;
-    font-size: 18px;
+.form-control:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
+}
+
+.btn-custom {
+    background-color: #6a11cb;
+    color: #fff;
+    border-radius: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #2575fc;
+    transform: translateY(-2px);
+}
+
+.btn-show-password {
+    background: none;
     border: none;
-    cursor: pointer; 
+    color: #6a11cb;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
-.btn-login:hover {
-    background-color: #0056b3;
-}
-
-.forgot-password {
-    display: block;
+.options {
     text-align: center;
     margin-top: 10px;
-    color: #007bff;
-    text-decoration: none; 
 }
 
-.forgot-password:hover {
-    text-decoration: underline;
+.options a {
+    color: blueviolet;
+    transition: color 0.3s;
 }
 
-.social-login {
-    margin-top: 20px;
+.options a:hover {
+    color: #2575fc;
+}
+
+.error {
+    color: red;
+    display: none;
+    margin-top: 10px;
     text-align: center;
 }
 
-.social-login .btn {
-    margin: 5px;
-    border-radius: 5px;
-    padding: 10px; 
+.loading {
+    display: none;
+    text-align: center;
+    font-weight: bold;
+    color: blue;
 }

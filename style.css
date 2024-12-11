@@ -81,3 +81,8 @@ body {
     font-size: 1.2rem;
   }
 }
+.carousel-item img {
+  height: 850px;
+  object-fit: cover;
+  width: 100%;
+}
