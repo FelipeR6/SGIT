@@ -1,5 +1,5 @@
 <?php
-
+include('../conexion/conexion.php');
 if (!empty($_POST["btnregistrar"])) {
     if (!empty($_POST["Fecha_Prestamo_Equipo"]) && !empty($_POST["Fecha_entrega_prestamo"]) && !empty($_POST["Id_Usuario"]) && !empty($_POST["Id_Equipos"]) && !empty($_POST["Id_Ubicacion"]) && !empty($_POST["Id_Estado_Equipo"])) {
         

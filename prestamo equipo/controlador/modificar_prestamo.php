@@ -1,9 +1,9 @@
 <?php
-include "modelo/conexion.php";
+include('../conexion/conexion.php');
 
 if (!empty($_POST["btnmodificar"])) {
     if (!empty($_POST["id"]) && !empty($_POST["Fecha_Prestamo_Equipo"]) && !empty($_POST["Fecha_entrega_prestamo"]) && !empty($_POST["Id_Usuario"]) && !empty($_POST["Id_Equipos"]) && !empty($_POST["Id_Ubicacion"]) && !empty($_POST["Id_Estado_Equipo"])) {
-        
+
         $id = $_POST["id"];
         $Fecha_Prestamo_Equipo = $_POST["Fecha_Prestamo_Equipo"];
         $Fecha_entrega_prestamo = $_POST["Fecha_entrega_prestamo"];
@@ -22,7 +22,7 @@ if (!empty($_POST["btnmodificar"])) {
             WHERE Id_Prestamo_Equipo=$id");
 
         if ($sql) {
-            header("Location:prestamo.php");
+            header("Location:../prestamo equipo/comprobar_prestamo.php");
         } else {
             echo '<div class="alert alert-danger">Error al Modificar</div>';
         }
@@ -30,4 +30,3 @@ if (!empty($_POST["btnmodificar"])) {
         echo "<div class='alert alert-warning'>Campos Vacíos</div>";
     }
 }
-?>
