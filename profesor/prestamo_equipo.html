@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Préstamos</title>
+    <link rel="stylesheet" href="../css/inicio.css" />
+    <link rel="stylesheet" href="../css/tablas.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>SGIT</h2>
+        <div class="theme-toggle">
+          <i class="fa-solid fa-sun sun"></i>
+          <label class="switch">
+            <input type="checkbox" id="theme-toggle" />
+            <span class="slider"></span>
+          </label>
+          <i class="fa-solid fa-moon moon"></i>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow inventory-glow"></div>
+            <a href="dashboard_profesor.html" class="nav-link-front">
+              <i class="fas fa-home nav-icon inventory-icon"></i>
+              <span>Inicio</span>
+            </a>
+            <a href="dashboard_profesor.html" class="nav-link-back">
+              <i class="fas fa-home nav-icon inventory-icon"></i>
+              <span>Inicio</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow inventory-glow"></div>
+            <a href="inventario.html" class="nav-link-front">
+              <i class="fas fa-box nav-icon inventory-icon"></i>
+              <span>Inventario</span>
+            </a>
+            <a href="inventario.html" class="nav-link-back">
+              <i class="fas fa-box nav-icon inventory-icon"></i>
+              <span>Inventario</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow admin-glow"></div>
+            <a href="pqrs.php" class="nav-link-front">
+              <i class="fas fa-cogs nav-icon admin-icon"></i>
+              <span>PQRS</span>
+            </a>
+            <a href="pqrs.php" class="nav-link-back">
+              <i class="fas fa-cogs nav-icon admin-icon"></i>
+              <span>PQRS</span>
+            </a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow profile-glow"></div>
+            <a href="perfil.html" class="nav-link-front">
+              <i class="fas fa-user nav-icon profile-icon"></i>
+              <span>Perfil</span>
+            </a>
+            <a href="perfil.html" class="nav-link-back">
+              <i class="fas fa-user nav-icon profile-icon"></i>
+              <span>Perfil</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow logout-glow"></div>
+            <a href="../index.html" class="nav-link-front">
+              <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+            <a href="../index.html" class="nav-link-back">
+              <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Solicitud de Préstamo de Equipo</h1>
+                <p>Complete el formulario para solicitar un préstamo de equipo. Las solicitudes son procesadas en 24-48 horas.</p>
+            </div>
+            
+            <div class="card-content">
+                <div id="success-message" class="success-message hidden">
+                    <div class="success-icon">&#10003;</div>
+                    <h3>¡Solicitud Enviada!</h3>
+                    <p>Su solicitud ha sido recibida. Recibirá una confirmación por correo electrónico pronto.</p>
+                </div>
+                
+                <form id="loan-form">
+                    <div class="form-group">
+                        <label for="name">Nombre Completo</label>
+                        <input type="text" id="name" name="name" placeholder="Juan Pérez" required>
+                        <span class="error-message" id="name-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" placeholder="juan.perez@empresa.com" required>
+                        <span class="error-message" id="email-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="equipment-type">Tipo de Equipo</label>
+                        <select id="equipment-type" name="equipment_type" required>
+                            <option value="" disabled selected>Seleccione un equipo</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="Proyector">Proyector</option>
+                            <option value="Cámara">Cámara</option>
+                            <option value="Micrófono">Micrófono</option>
+                            <option value="Tablet">Tablet</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        <span class="error-message" id="equipment-type-error"></span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start-date">Fecha de Inicio</label>
+                            <input type="date" id="start-date" name="start_date" required>
+                            <span class="error-message" id="start-date-error"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="end-date">Fecha de Devolución</label>
+                            <input type="date" id="end-date" name="end_date" required>
+                            <span class="error-message" id="end-date-error"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reason">Motivo del Préstamo</label>
+                        <textarea id="reason" name="reason" rows="4" placeholder="Explique por qué necesita este equipo y cómo será utilizado" required></textarea>
+                        <span class="error-message" id="reason-error"></span>
+                    </div>
+                    
+                    <div class="form-footer">
+                        <button type="submit" id="submit-btn">Enviar Solicitud</button>
+                        <div class="loading-spinner hidden" id="loading-spinner"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('loan-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const successMessage = document.getElementById('success-message');
+    
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+    
+                if (validateForm()) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Enviando...';
+                    loadingSpinner.classList.remove('hidden');
+    
+                    const formData = {
+                        name: document.getElementById('name').value.trim(),
+                        email: document.getElementById('email').value.trim(),
+                        equipment_type: document.getElementById('equipment-type').value,
+                        start_date: document.getElementById('start-date').value,
+                        end_date: document.getElementById('end-date').value,
+                        reason: document.getElementById('reason').value.trim()
+                    };
+    
+                    try {
+                        const response = await fetch('/api/prestamo_equipo.php', { 
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(formData)
+                        });
+    
+                        if (!response.ok) {
+                            throw new Error('Error en la respuesta del servidor.');
+                        }
+    
+                        const data = await response.json();
+                        loadingSpinner.classList.add('hidden');
+    
+                        if (data.success) {
+                            form.reset();
+                            successMessage.classList.remove('hidden');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Enviar Solicitud';
+                        } else {
+                            alert('Error: ' + data.message);
+                            resetButton();
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Ocurrió un error al enviar el formulario. Por favor, inténtelo de nuevo.');
+                        resetButton();
+                    }
+                }
+            });
+    
+            function resetButton() {
+                loadingSpinner.classList.add('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar Solicitud';
+            }
+    
+            function validateForm() {
+                let isValid = true;
+                document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+    
+                const name = document.getElementById('name');
+                if (name.value.trim().length < 2) {
+                    document.getElementById('name-error').textContent = 'El nombre es requerido';
+                    isValid = false;
+                }
+    
+                const email = document.getElementById('email');
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email.value)) {
+                    document.getElementById('email-error').textContent = 'Email inválido';
+                    isValid = false;
+                }
+    
+                const equipmentType = document.getElementById('equipment-type');
+                if (equipmentType.value === '') {
+                    document.getElementById('equipment-type-error').textContent = 'Tipo de equipo es requerido';
+                    isValid = false;
+                }
+    
+                return isValid;
+            }
+        });
+    </script>
+</body>
+
+</html>

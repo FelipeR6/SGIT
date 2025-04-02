@@ -1,5 +1,5 @@
 <?php
-include "modelo/conexion.php";
+include('../conexion/conexion.php');
 
 if (!empty($_POST["btnmodificar"])) {
     if (!empty($_POST["id"]) && 
@@ -10,7 +10,7 @@ if (!empty($_POST["btnmodificar"])) {
         !empty($_POST["Telefono_1_Usuario"]) && 
         !empty($_POST["Telefono_2_Usuario"]) && 
         !empty($_POST["Correo_Usuario"]) && 
-        !empty($_POST["Contraseña_Usuario"]) && 
+        !empty($_POST["Contraseña"]) && 
         !empty($_POST["Id_Rol"])) {
         
         $id = $_POST["id"];
@@ -21,7 +21,7 @@ if (!empty($_POST["btnmodificar"])) {
         $Telefono_1_Usuario = $_POST["Telefono_1_Usuario"];
         $Telefono_2_Usuario = $_POST["Telefono_2_Usuario"];
         $Correo_Usuario = $_POST["Correo_Usuario"];
-        $Contraseña_Usuario = password_hash($_POST["Contraseña_Usuario"], PASSWORD_DEFAULT);
+        $Contraseña = password_hash($_POST["Contraseña"], PASSWORD_DEFAULT);
         $Id_Rol = $_POST["Id_Rol"];
 
         $stmt = $conexion->prepare("UPDATE usuario 
@@ -32,12 +32,12 @@ if (!empty($_POST["btnmodificar"])) {
                 Telefono_1_Usuario=?, 
                 Telefono_2_Usuario=?, 
                 Correo_Usuario=?, 
-                Contraseña_Usuario=?, 
+                Contraseña=?, 
                 Id_Rol=? 
             WHERE Id_Usuario=?");
 
         if ($stmt) {
-            $stmt->bind_param("ssssssssis", $Nombre_Usuario_1, $Nombre_Usuario_2, $Apellidos_Usuario_1, $Apellidos_Usuario_2, $Telefono_1_Usuario, $Telefono_2_Usuario, $Correo_Usuario, $Contraseña_Usuario, $Id_Rol, $id);
+            $stmt->bind_param("ssssssssis", $Nombre_Usuario_1, $Nombre_Usuario_2, $Apellidos_Usuario_1, $Apellidos_Usuario_2, $Telefono_1_Usuario, $Telefono_2_Usuario, $Correo_Usuario, $Contraseña, $Id_Rol, $id);
 
             if ($stmt->execute()) {
                 header("Location:comprobar_registro.php");

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SGIT - Dashboard</title>
+  <link rel="stylesheet" href="../css/inicio.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>SGIT</h2>
+      <div class="theme-toggle">
+        <i class="fa-solid fa-sun sun"></i>
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle" />
+          <span class="slider"></span>
+        </label>
+        <i class="fa-solid fa-moon moon"></i>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow inventory-glow"></div>
+          <a href="inventario.html" class="nav-link-front">
+            <i class="fas fa-box nav-icon inventory-icon"></i>
+            <span>Inventario</span>
+          </a>
+          <a href="inventario.html" class="nav-link-back">
+            <i class="fas fa-box nav-icon inventory-icon"></i>
+            <span>Inventario</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow maintenance-glow"></div>
+          <a href="prestamo.html" class="nav-link-front">
+            <i class="fas fa-tools nav-icon maintenance-icon"></i>
+            <span>Prestamo</span>
+          </a>
+          <a href="prestamo.html" class="nav-link-back">
+            <i class="fas fa-tools nav-icon maintenance-icon"></i>
+            <span>Prestamo</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow logout-glow"></div>
+          <a href="../index.html" class="nav-link-front">
+            <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+            <span>Cerrar Sesión</span>
+          </a>
+          <a href="../index.html" class="nav-link-back">
+            <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+            <span>Cerrar Sesión</span>
+          </a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow profile-glow"></div>
+          <a href="perfil.html" class="nav-link-front">
+            <i class="fas fa-user nav-icon profile-icon"></i>
+            <span>Perfil</span>
+          </a>
+          <a href="perfil.html" class="nav-link-back">
+            <i class="fas fa-user nav-icon profile-icon"></i>
+            <span>Perfil</span>
+          </a>
+        </div>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="top-bar">
+      <div class="top-bar-info">
+        <h1>Inicio</h1>
+        <p>Bienvenido al sistema de gestión de inventarios</p>
+      </div>
+      <div class="user-profile">
+        <div class="user-avatar">M</div>
+        <div class="user-info">
+          <div class="user-name">Mantenim</div>
+          <div class="user-role">Profesor</div>
+        </div>
+      </div>
+    </div>
+
+    <section class="cards-container">
+      <div class="card" onclick="location.href='inventario.html'">
+        <div class="card-icon">
+          <i class="fas fa-clipboard-check"></i>
+        </div>
+        <h3>inventario</h3>
+        <p>Revisa el inventario</p>
+      </div>
+      <div class="card" onclick="location.href='mantenimiento.html'">
+        <div class="card-icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <h3>Mantenimiento</h3>
+        <p>Consulta los mantenimientos de los equiposo</p>
+      </div>
+      <div class="card" onclick="location.href='prestamo.html'">
+        <div class="card-icon">
+          <i class="fas fa-history"></i>
+        </div>
+        <h3>Prestamo</h3>
+        <p>Consulta los prestamos</p>
+      </div>
+      <div class="card" onclick="location.href='./pqrs.php'">
+        <div class="card-icon">
+          <i class="fas fa-comment-dots"></i>
+        </div>
+        <h3>PQRS</h3>
+        <p>Envía tus peticiones, quejas, reclamos y sugerencias</p>
+      </div>
+    </section>
+
+    <div class="chart-container">
+      <div class="chart-header">
+        <h2>Estadísticas del Sistema</h2>
+        <div class="chart-actions">
+          <button class="chart-btn active">Mensual</button>
+          <button class="chart-btn">Trimestral</button>
+          <button class="chart-btn">Anual</button>
+        </div>
+      </div>
+      <canvas id="myChart"></canvas>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Configuración del gráfico
+    const ctx = document.getElementById("myChart").getContext("2d");
+    let chartConfig = {
+      type: "bar",
+      data: {
+        labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo"],
+        datasets: [
+          {
+            label: "Equipos registrados",
+            data: [12, 19, 3, 5, 2],
+            backgroundColor: "rgba(54, 162, 235, 0.6)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    };
+
+    // Función para actualizar colores del gráfico según el tema
+    function updateChartColors(isDark) {
+      const textColor = isDark ? "#f8fafc" : "#0f172a";
+      const gridColor = isDark
+        ? "rgba(255, 255, 255, 0.1)"
+        : "rgba(0, 0, 0, 0.1)";
+
+      chartConfig.options.scales.y.grid = {
+        color: gridColor,
+      };
+      chartConfig.options.scales.x.grid = {
+        color: gridColor,
+      };
+      chartConfig.options.scales.y.ticks = {
+        color: textColor,
+      };
+      chartConfig.options.scales.x.ticks = {
+        color: textColor,
+      };
+      chartConfig.options.plugins = {
+        legend: {
+          labels: {
+            color: textColor,
+          },
+        },
+      };
+
+      // Recrear el gráfico con los nuevos colores
+      if (window.myChartInstance) {
+        window.myChartInstance.destroy();
+      }
+      window.myChartInstance = new Chart(ctx, chartConfig);
+    }
+
+    // Inicializar el gráfico
+    window.myChartInstance = new Chart(ctx, chartConfig);
+
+    // Funcionalidad para cambiar entre tema claro y oscuro
+    const themeToggle = document.getElementById("theme-toggle");
+
+    // Verificar si hay una preferencia guardada
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark");
+      themeToggle.checked = true;
+      updateChartColors(true);
+    } else {
+      updateChartColors(false);
+    }
+
+    themeToggle.addEventListener("change", function () {
+      if (this.checked) {
+        document.body.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+        updateChartColors(true);
+      } else {
+        document.body.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+        updateChartColors(false);
+      }
+    });
+
+    // Animación para las cards
+    document.addEventListener("DOMContentLoaded", function () {
+      const cards = document.querySelectorAll(".card");
+      cards.forEach((card, index) => {
+        card.style.setProperty("--i", index + 1);
+      });
+
+      // Botones de acción del gráfico
+      const chartButtons = document.querySelectorAll(".chart-btn");
+      chartButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          chartButtons.forEach((btn) => btn.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

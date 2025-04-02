@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Préstamos</title>
+    <link rel="stylesheet" href="../css/inicio.css" />
+    <link rel="stylesheet" href="../css/tablas.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>SGIT</h2>
+        <div class="theme-toggle">
+          <i class="fa-solid fa-sun sun"></i>
+          <label class="switch">
+            <input type="checkbox" id="theme-toggle" />
+            <span class="slider"></span>
+          </label>
+          <i class="fa-solid fa-moon moon"></i>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow inventory-glow"></div>
+            <a href="dashboard_profesor.html" class="nav-link-front">
+              <i class="fas fa-home nav-icon inventory-icon"></i>
+              <span>Inicio</span>
+            </a>
+            <a href="dashboard_profesor.html" class="nav-link-back">
+              <i class="fas fa-home nav-icon inventory-icon"></i>
+              <span>Inicio</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow inventory-glow"></div>
+            <a href="inventario.html" class="nav-link-front">
+              <i class="fas fa-box nav-icon inventory-icon"></i>
+              <span>Inventario</span>
+            </a>
+            <a href="inventario.html" class="nav-link-back">
+              <i class="fas fa-box nav-icon inventory-icon"></i>
+              <span>Inventario</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow admin-glow"></div>
+            <a href="pqrs.php" class="nav-link-front">
+              <i class="fas fa-cogs nav-icon admin-icon"></i>
+              <span>PQRS</span>
+            </a>
+            <a href="pqrs.php" class="nav-link-back">
+              <i class="fas fa-cogs nav-icon admin-icon"></i>
+              <span>PQRS</span>
+            </a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow profile-glow"></div>
+            <a href="perfil.html" class="nav-link-front">
+              <i class="fas fa-user nav-icon profile-icon"></i>
+              <span>Perfil</span>
+            </a>
+            <a href="perfil.html" class="nav-link-back">
+              <i class="fas fa-user nav-icon profile-icon"></i>
+              <span>Perfil</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow logout-glow"></div>
+            <a href="../index.html" class="nav-link-front">
+              <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+            <a href="../index.html" class="nav-link-back">
+              <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="top-bar">
+        <div class="top-bar-info">
+          <h1>Préstamos</h1>
+          <p>Gestión de préstamos de equipos</p>
+        </div>
+        <div class="user-profile">
+          <div class="user-avatar">P</div>
+          <div class="user-info">
+            <div class="user-name"></div>
+            <div class="user-role"></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="prestamo-panel">
+        <h2>Préstamos de Equipos</h2>
+        <div id="printable">
+          <table>
+            <caption>
+              Lista de Préstamos Registrados
+            </caption>
+            <thead>
+              <tr>
+                <th>ID Préstamo</th>
+                <th>Fecha Préstamo</th>
+                <th>Fecha Entrega</th>
+                <th>Usuario</th>
+                <th>Marca Equipo</th>
+                <th>Ubicación</th>
+                <th>Estado Entregado</th>
+              </tr>
+            </thead>
+            <tbody id="prestamo-entries">
+              <tr>
+                <td colspan="7">Cargando datos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="print-btn" onclick="imprimirTabla()">🖨️ Imprimir</button>
+
+        <script>
+            function imprimirTabla() {
+                let contenido = document.getElementById("printable").innerHTML;
+                let ventanaImpresion = window.open("", "", "width=800,height=600");
+                ventanaImpresion.document.write(`
+                    <html>
+                        <head>
+                            <title>Imprimir Inventario</title>
+                            <link rel="stylesheet" href="css/tablas.css">
+                        </head>
+                        <body>
+                            ${contenido}
+                        </body>
+                    </html>
+                `);
+                ventanaImpresion.document.close();
+                ventanaImpresion.focus();
+                ventanaImpresion.print();
+                ventanaImpresion.close();
+            }
+        </script>
+        
+      </section>
+    </main>
+
+    <script>
+      // Funcionalidad para cambiar entre tema claro y oscuro
+      const themeToggle = document.getElementById("theme-toggle");
+
+      // Verificar si hay una preferencia guardada
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+        themeToggle.checked = true;
+      }
+
+      themeToggle.addEventListener("change", function () {
+        if (this.checked) {
+          document.body.classList.add("dark");
+          localStorage.setItem("theme", "dark");
+        } else {
+          document.body.classList.remove("dark");
+          localStorage.setItem("theme", "light");
+        }
+      });
+
+      // Cargar datos de préstamos
+      fetch("http://localhost/SGIT/api/prestamo.php")
+        .then((response) => response.json())
+        .then((data) => {
+          let rows = "";
+          data.forEach((prestamo) => {
+            rows += `<tr>
+                                <td>${prestamo.Id_Prestamo_Equipo}</td>
+                                <td>${prestamo.Fecha_Prestamo_Equipo}</td>
+                                <td>${prestamo.Fecha_entrega_prestamo}</td>
+                                <td>${prestamo.Nombre_Usuario_1}</td>
+                                <td>${prestamo.Marca_Equipo}</td>
+                                <td>${prestamo.Nombre_Ubicacion}</td>
+                                <td>${prestamo.Estado_Entregado}</td>
+                            </tr>`;
+          });
+          document.getElementById("prestamo-entries").innerHTML = rows;
+        })
+        .catch((error) => {
+          document.getElementById("prestamo-entries").innerHTML =
+            '<tr><td colspan="7">Error al cargar los datos.</td></tr>';
+        });
+        async function obtenerUsuario() {
+     try {
+         const response = await fetch("../obtener_usuario.php");
+         const data = await response.json();
+ 
+         if (data.error) {
+             console.error("Error:", data.error);
+             return;
+         }
+ 
+         // Insertar nombre y rol en la interfaz
+         document.querySelector(".user-name").textContent = data.nombre;
+         document.querySelector(".user-role").textContent = `Rol: ${data.nombre_rol} (ID: ${data.id_rol})`;
+ 
+         // Inicial de avatar
+         document.querySelector(".user-avatar").textContent = data.nombre.charAt(0).toUpperCase();
+     } catch (error) {
+         console.error("Error al obtener datos del usuario:", error);
+     }
+ }
+ 
+    </script>
+  </body>
+</html>

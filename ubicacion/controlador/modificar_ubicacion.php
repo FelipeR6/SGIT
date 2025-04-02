@@ -1,25 +1,27 @@
 <?php
-include "ubicacion/conexion.php";
+include('../conexion/conexion.php');
 
 if (!empty($_POST["btnmodificar"])) {
-    if (!empty($_POST["id"]) && !empty($_POST["Nombre_Ubicacion"]) && !empty($_POST["Prestamo_Disponible"])) {
+    if (!empty($_POST["id"]) && !empty($_POST["Nombre_Ubicacion"]) && !empty($_POST["Prestamo_disponible"])) {
         
-        $id = $_POST["id"];
-        $Nombre_Ubicacion = $_POST["Nombre_Ubicacion"];
-        $Prestamo_disponible = $_POST["Prestamo_Disponible"];
+        // Sanitización de datos para evitar inyección SQL
+        $id = intval($_POST["id"]); // Convertir a entero para mayor seguridad
+        $Nombre_Ubicacion = trim($_POST["Nombre_Ubicacion"]); 
+        $Prestamo_disponible = trim($_POST["Prestamo_disponible"]);
 
-        $sql = $conexion->query("UPDATE ubicacion
-            SET Nombre_Ubicacion='$Nombre_Ubicacion',
-                Prestamo_Disponible='$Prestamo_disponible'
-            WHERE Id_Ubicacion=$id");
+        // Preparar la consulta para evitar SQL Injection
+        $stmt = $conexion->prepare("UPDATE ubicacion SET Nombre_Ubicacion = ?, Prestamo_disponible = ? WHERE Id_Ubicacion = ?");
+        $stmt->bind_param("ssi", $Nombre_Ubicacion, $Prestamo_disponible, $id);
 
-        if ($sql) {
-            header("Location:ubicacion.php");
+        if ($stmt->execute()) {
+            $stmt->close();
+            header("Location: ubicacion.php");
+            exit; // Detener ejecución
         } else {
-            echo '<div class="alert alert-danger">Error al Modificar</div>';
+            echo '<div class="alert alert-danger">Error al modificar</div>';
         }
     } else {
-        echo "<div class='alert alert-warning'>Campos Vacíos</div>";
+        echo "<div class='alert alert-warning'>Campos vacíos</div>";
     }
 }
 ?>

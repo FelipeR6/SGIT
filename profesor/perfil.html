@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="../css/inicio.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>SGIT</h2>
+            <div class="theme-toggle">
+                <i class="fa-solid fa-sun sun"></i>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+                <i class="fa-solid fa-moon moon"></i>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-item">
+                <div class="nav-link-wrapper">
+                    <div class="item-glow inventory-glow"></div>
+                    <a href="dashboard_profesor.html" class="nav-link-front">
+                        <i class="fas fa-home nav-icon inventory-icon"></i>
+                        <span>Inicio</span>
+                    </a>
+                    <a href="dashboard_profesor.html" class="nav-link-back">
+                        <i class="fas fa-home nav-icon inventory-icon"></i>
+                        <span>Inicio</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <div class="nav-link-wrapper">
+                    <div class="item-glow inventory-glow"></div>
+                    <a href="inventario.html" class="nav-link-front">
+                        <i class="fas fa-box nav-icon inventory-icon"></i>
+                        <span>Inventario</span>
+                    </a>
+                    <a href="inventario.html" class="nav-link-back">
+                        <i class="fas fa-box nav-icon inventory-icon"></i>
+                        <span>Inventario</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <div class="nav-link-wrapper">
+                    <div class="item-glow admin-glow"></div>
+                    <a href="administracion.html" class="nav-link-front">
+                        <i class="fas fa-cogs nav-icon admin-icon"></i>
+                        <span>Administración</span>
+                    </a>
+                    <a href="administracion.html" class="nav-link-back">
+                        <i class="fas fa-cogs nav-icon admin-icon"></i>
+                        <span>Administración</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <div class="nav-link-wrapper">
+                    <div class="item-glow lifecycle-glow"></div>
+                    <a href="hojavida.html" class="nav-link-front">
+                        <i class="fas fa-file-alt nav-icon lifecycle-icon"></i>
+                        <span>Hoja de Vida</span>
+                    </a>
+                    <a href="hojavida.html" class="nav-link-back">
+                        <i class="fas fa-file-alt nav-icon lifecycle-icon"></i>
+                        <span>Hoja de Vida</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <div class="nav-link-wrapper">
+                    <div class="item-glow profile-glow"></div>
+                    <a href="perfil.html" class="nav-link-front">
+                        <i class="fas fa-user nav-icon profile-icon"></i>
+                        <span>Perfil</span>
+                    </a>
+                    <a href="perfil.html" class="nav-link-back">
+                        <i class="fas fa-user nav-icon profile-icon"></i>
+                        <span>Perfil</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <div class="nav-link-wrapper">
+                    <div class="item-glow logout-glow"></div>
+                    <a href="index.html" class="nav-link-front">
+                        <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+                        <span>Cerrar Sesión</span>
+                    </a>
+                    <a href="index.html" class="nav-link-back">
+                        <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+                        <span>Cerrar Sesión</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="content">
+        <div class="top-bar">
+            <div class="top-bar-info">
+                <h1>Perfil</h1>
+                <p>Información personal y configuración</p>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">p</div>
+                <div class="user-info">
+                    <div class="user-name"></div>
+                    <div class="user-role"></div>
+                </div>
+            </div>
+        </div>
+    
+        <section class="profile">
+            <div class="profile-header">
+                <img src="imagenes/logo.png" alt="Foto de perfil" class="profile-img">
+                <h2>Bienvenido, <span id="userName">Usuario</span></h2>
+                <p class="user-role">Rol: Docente</p>
+            </div>
+            
+            <div class="profile-info">
+                <h3>Información Personal</h3>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="fullName">Nombre Completo:</label>
+                        <input type="text" id="fullName" name="fullName" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico:</label>
+                        <input type="email" id="email" name="email" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Teléfono:</label>
+                        <input type="tel" id="phone" name="phone" value="">
+                    </div>
+                    <button type="submit" class="cta-btn">Actualizar Información</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        // Funcionalidad para cambiar entre tema claro y oscuro
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // Verificar si hay una preferencia guardada
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+            themeToggle.checked = true;
+        }
+        
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        document.getElementById("profileForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            alert("Información actualizada correctamente.");
+        });
+        async function obtenerUsuario() {
+     try {
+         const response = await fetch("../obtener_usuario.php");
+         const data = await response.json();
+ 
+         if (data.error) {
+             console.error("Error:", data.error);
+             return;
+         }
+ 
+         // Insertar nombre y rol en la interfaz
+         document.querySelector(".user-name").textContent = data.nombre;
+         document.querySelector(".user-role").textContent = `Rol: ${data.nombre_rol} (ID: ${data.id_rol})`;
+ 
+         // Inicial de avatar
+         document.querySelector(".user-avatar").textContent = data.nombre.charAt(0).toUpperCase();
+     } catch (error) {
+         console.error("Error al obtener datos del usuario:", error);
+     }
+ }
+ 
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventario</title>
+    <link rel="stylesheet" href="../css/inicio.css" />
+    <link rel="stylesheet" href="../css/tablas.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>SGIT</h2>
+        <div class="theme-toggle">
+          <i class="fa-solid fa-sun sun"></i>
+          <label class="switch">
+            <input type="checkbox" id="theme-toggle" />
+            <span class="slider"></span>
+          </label>
+          <i class="fa-solid fa-moon moon"></i>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow inventory-glow"></div>
+            <a href="dashboard_profesor.HTML" class="nav-link-front">
+              <i class="fas fa-home nav-icon inventory-icon"></i>
+              <span>Inicio</span>
+            </a>
+            <a href="dashboard_profesor.HTML" class="nav-link-back">
+              <i class="fas fa-home nav-icon inventory-icon"></i>
+              <span>Inicio</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow admin-glow"></div>
+            <a href="pqrs.php" class="nav-link-front">
+              <i class="fas fa-cogs nav-icon admin-icon"></i>
+              <span>pqrs</span>
+            </a>
+            <a href="pqrs.php" class="nav-link-back">
+              <i class="fas fa-cogs nav-icon admin-icon"></i>
+              <span>pqrs</span>
+            </a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow profile-glow"></div>
+            <a href="perfil.html" class="nav-link-front">
+              <i class="fas fa-user nav-icon profile-icon"></i>
+              <span>Perfil</span>
+            </a>
+            <a href="perfil.html" class="nav-link-back">
+              <i class="fas fa-user nav-icon profile-icon"></i>
+              <span>Perfil</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow logout-glow"></div>
+            <a href="../index.html" class="nav-link-front">
+              <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+            <a href="../index.html" class="nav-link-back">
+              <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="top-bar">
+        <div class="top-bar-info">
+          <h1>Inventario</h1>
+          <p>Gestión de equipos y dispositivos</p>
+        </div>
+        <div class="user-profile">
+          <div class="user-avatar">P</div>
+          <div class="user-info">
+            <div class="user-name"></div>
+            <div class="user-role"></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="inventory-panel">
+        <h2>Inventario</h2>
+        <button onclick="agregarEquipo()">➕ Agregar Equipo</button>
+        <div id="printable">
+          <table>
+            <caption>
+              Lista de Equipos Registrados
+            </caption>
+            <thead>
+              <tr>
+                <th>Marca</th>
+                <th>Año</th>
+                <th>Categoría</th>
+                <th>Modelo</th>
+                <th>Último Préstamo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-entries">
+              <tr>
+                <td colspan="6">Cargando datos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="print-btn" onclick="imprimirTabla()">🖨️ Imprimir</button>
+
+        <script>
+          function imprimirTabla() {
+            let contenido = document.getElementById("printable").innerHTML;
+            let ventanaImpresion = window.open("", "", "width=800,height=600");
+            ventanaImpresion.document.write(`
+            <html>
+                <head>
+                    <title>Imprimir Inventario</title>
+                    <link rel="stylesheet" href="css/tablas.css">
+                </head>
+                <body>
+                    ${contenido}
+                </body>
+            </html>
+        `);
+            ventanaImpresion.document.close();
+            ventanaImpresion.focus();
+            ventanaImpresion.print();
+            ventanaImpresion.close();
+          }
+        </script>
+      </section>
+    </main>
+
+    <script>
+      const API_URL = "http://localhost/SGIT/api/inventario.php";
+ 
+ document.addEventListener("DOMContentLoaded", () => {
+     cargarInventario();
+     obtenerUsuario();
+ });
+ 
+ function cargarInventario() {
+     fetch(API_URL)
+         .then(response => response.json())
+         .then(data => {
+             let rows = "";
+             data.forEach(equipo => {
+                 rows += `<tr>
+                             <td>${equipo.Marca_Equipo}</td>
+                             <td>${equipo.Año_Equipo}</td>
+                             <td>${equipo.Nombre_Categoria}</td>
+                             <td>${equipo.Caracteristicas_Modelo}</td>
+                             <td>${equipo.Ultimo_Prestamo ? equipo.Ultimo_Prestamo : "No disponible"}</td>
+                             <td>
+                                 <button onclick="editarEquipo(${equipo.Id_Equipos})">✏️</button>
+                                 <button onclick="eliminarEquipo(${equipo.Id_Equipos})">🗑️</button>
+                             </td>
+                         </tr>`;
+             });
+             document.getElementById("inventory-entries").innerHTML = rows;
+         })
+         .catch(error => {
+             document.getElementById("inventory-entries").innerHTML = '<tr><td colspan="6">Error al cargar los datos.</td></tr>';
+             console.error("Error cargando el inventario:", error);
+         });
+ }
+ 
+ function agregarEquipo() {
+     const marca = prompt("Ingrese la marca del equipo:");
+     const anio = prompt("Ingrese el año del equipo:");
+     const categoria = prompt("Ingrese la ID de la categoría:");
+     const modelo = prompt("Ingrese la ID del modelo:");
+ 
+     if (!marca || !anio || !categoria || !modelo) return alert("Todos los campos son obligatorios.");
+ 
+     fetch(API_URL, {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+             Marca_Equipo: marca,
+             Año_Equipo: anio,
+             Id_Categoria: categoria,
+             Id_Modelo: modelo,
+         }),
+     })
+         .then(response => response.json())
+         .then(data => {
+             alert(data.message || data.error);
+             cargarInventario();
+         })
+         .catch(error => console.error("Error agregando equipo:", error));
+ }
+ 
+ function editarEquipo(id) {
+     const marca = prompt("Ingrese la nueva marca:");
+     const anio = prompt("Ingrese el nuevo año:");
+     const categoria = prompt("Ingrese la nueva ID de la categoría:");
+     const modelo = prompt("Ingrese la nueva ID del modelo:");
+ 
+     if (!marca || !anio || !categoria || !modelo) return alert("Todos los campos son obligatorios.");
+ 
+     fetch(API_URL, {
+         method: "PUT",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+             Id_Equipos: id,
+             Marca_Equipo: marca,
+             Año_Equipo: anio,
+             Id_Categoria: categoria,
+             Id_Modelo: modelo,
+         }),
+     })
+         .then(response => response.json())
+         .then(data => {
+             alert(data.message || data.error);
+             cargarInventario();
+         })
+         .catch(error => console.error("Error editando equipo:", error));
+ }
+ 
+ function eliminarEquipo(id) {
+     if (!confirm("¿Seguro que quieres eliminar este equipo?")) return;
+ 
+     fetch(API_URL, {
+         method: "DELETE",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ Id_Equipos: id }),
+     })
+         .then(response => response.json())
+         .then(data => {
+             alert(data.message || data.error);
+             cargarInventario();
+         })
+         .catch(error => console.error("Error eliminando equipo:", error));
+ }
+ 
+ // Funcionalidad para el cambio de tema
+ const themeToggle = document.getElementById("theme-toggle");
+ const savedTheme = localStorage.getItem("theme");
+ 
+ if (savedTheme === "dark") {
+     document.body.classList.add("dark");
+     themeToggle.checked = true;
+ }
+ 
+ themeToggle.addEventListener("change", function () {
+     document.body.classList.toggle("dark", this.checked);
+     localStorage.setItem("theme", this.checked ? "dark" : "light");
+ });
+ 
+ // Función para obtener usuario
+ async function obtenerUsuario() {
+     try {
+         const response = await fetch("../obtener_usuario.php");
+         const data = await response.json();
+ 
+         if (data.error) {
+             console.error("Error:", data.error);
+             return;
+         }
+ 
+         // Insertar nombre y rol en la interfaz
+         document.querySelector(".user-name").textContent = data.nombre;
+         document.querySelector(".user-role").textContent = `Rol: ${data.nombre_rol} (ID: ${data.id_rol})`;
+ 
+         // Inicial de avatar
+         document.querySelector(".user-avatar").textContent = data.nombre.charAt(0).toUpperCase();
+     } catch (error) {
+         console.error("Error al obtener datos del usuario:", error);
+     }
+ }
+ 
+     </script>
+  </body>
+</html>

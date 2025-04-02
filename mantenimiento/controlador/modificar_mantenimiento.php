@@ -1,5 +1,6 @@
 <?php
-include "modelo/conexion.php";
+include('../conexion/conexion.php');
+
 
 if (!empty($_POST["btnmodificar"])) {
     if (!empty($_POST["id"]) && !empty($_POST["Fecha_Inicio_mantenimiento"]) && !empty($_POST["Fecha_fin_mantenimiento"]) && !empty($_POST["Observaciones"]) && !empty($_POST["Id_Equipos"]) && !empty($_POST["Id_Usuario"])) {
