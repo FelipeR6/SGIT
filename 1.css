@@ -1,0 +1,118 @@
+
+/* Estilos generales */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #29589e, #c3cfe2);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+/* Contenedor del perfil */
+.profile {
+    background-color: #f8f8fd;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.profile:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Título de informacion personal */
+.profile-info h3 {
+    font-size: 30px;
+    color: #333;  
+}
+/* Espacio en el formulario */
+.form-group {
+    margin-bottom: 50px;
+}
+.form-group label {
+    color: #555;
+    margin-bottom: 5px;
+
+}
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-group input:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 8px rgba(106, 17, 203, 0.3);
+    outline: none;
+}
+/* Botón de llamada a la acción */
+.cta-btn {
+    width: 80%;
+    padding: 14px;
+    background-color: #6a11cb;
+    color: #f8f6f6;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.cta-btn:hover {
+    background-color: #2575fc;
+    transform: translateY(-8px);
+}
+
+.cta-btn:active {
+    transform: translateY(0);
+}
+
+/* Imagen de perfil */
+.profile-img {
+    width: 100%;
+    height: 100%;
+    
+}
+
+/* Texto del perfil */
+.profile-header h2 {
+    margin: 20px 0 10px;
+    font-size: 24px;
+    color: #333;
+    font-weight: 600;
+}
+
+.profile-header h2 span {
+    color: #6a11cb;
+    font-weight: 700;
+}
+
+.user-role {
+    margin: 10;
+    font-size: 16px;
+    color: #777;
+    background-color: #f0f0f0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.user-role:hover {
+    background-color: #6a11cb;
+    color: #ffffff;
+}
+
+
+
+
+
+
+

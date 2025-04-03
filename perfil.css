@@ -1,189 +1,181 @@
-/* Reset global */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Estilos generales */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: #fff;
-    overflow-x: hidden;
-    line-height: 1.6;
+  background-color: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
 }
 
-/* Header */
-header {
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-/* Espaciado inferior del header para evitar que tape el contenido */
-header {
-    margin-bottom: 20px; /* Ajusta este valor según sea necesario */
-}
-
-header .logo h1 {
-    font-size: 2.2rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-}
-
-nav ul li {
-    margin: 0 20px;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 8px 0;
-    position: relative;
-}
-
-nav ul li a:hover {
-    color: #FFD700;
-}
-
-nav ul li a.active {
-    color: #FFD700;
-}
-
-/* Perfil */
-.profile {
-    padding: 300px 20px 20px; /* Aumenta el espaciado superior para evitar que el contenido quede oculto por el header */
-    text-align: center;
+.profile-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 20px;
 }
 
 .profile-header {
-    margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #6e8efb, #103666);
+  color: rgb(250, 239, 239);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.profile-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    margin-bottom: 20px;
+.profile-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  transform: rotate(30deg);
 }
 
-.profile-header h2 {
-    font-size: 2rem;
-    margin-bottom: 10px;
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  transition: transform 0.3s ease;
 }
 
-.profile-header p {
-    font-size: 1.2rem;
-    color: #FFD700;
+.profile-picture:hover {
+  transform: scale(1.05);
 }
 
-.profile-info {
-    margin-bottom: 40px;
+.profile-name {
+  margin-top: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  z-index: 1;
 }
 
-.profile-info h3 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+.profile-title {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+  z-index: 1;
 }
 
-.form-group {
-    margin-bottom: 20px;
+.profile-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  z-index: 1;
 }
 
-label {
-    font-size: 1.1rem;
-    display: block;
-    margin-bottom: 5px;
+.stat-item {
+  text-align: center;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: 2px solid #fff;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    margin-bottom: 10px;
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
-input:disabled {
-    background-color: rgba(255, 255, 255, 0.3);
+.stat-label {
+  font-size: 0.8rem;
+  opacity: 0.8;
 }
 
-button.cta-btn {
-    background-color: #2575fc;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
+.profile-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
-button.cta-btn:hover {
-    background-color: #6a11cb;
+.profile-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
-/* Tabla de historial de préstamos */
-table {
-    width: 100%;
-    max-width: 1200px; /* Ancho máximo para la tabla */
-    margin: 30px auto; /* Centrar la tabla y margen superior */
-    border-collapse: collapse;
-    background-color: rgba(255, 255,  255, 0.1);
+.profile-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-table th, table td {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid #fff;
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-table th {
-    background-color: #2575fc;
-    color: white;
+.card-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  color: white;
+  font-size: 1.2rem;
 }
 
-table tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.2);
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
-table tr:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+.card-content {
+  color: #666;
+  margin-bottom: 1rem;
 }
 
-/* Footer */
-footer {
-    text-align: center;
-    padding: 20px 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+.card-link {
+  display: inline-block;
+  color: #6e8efb;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
 
-footer p {
-    font-size: 1rem;
+.card-link:hover {
+  color: #a777e3;
+}
+
+.card-link i {
+  margin-left: 5px;
+  transition: transform 0.3s ease;
+}
+
+.card-link:hover i {
+  transform: translateX(5px);
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+      padding: 1.5rem;
+  }
+  
+  .profile-name {
+      font-size: 1.5rem;
+  }
+  
+  .profile-stats {
+      gap: 1rem;
+  }
+  
+  .profile-content {
+      grid-template-columns: 1fr;
+  }
 }
