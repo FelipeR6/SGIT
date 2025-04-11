@@ -31,7 +31,15 @@ const MaintenanceScreen: React.FC<ScreenProps> = ({ navigation }) => {
   // Cargar datos al montar el componente
   useEffect(() => {
     fetchMantenimientos()
-  }, [])
+
+    // Agregar un listener para recargar los datos cuando la pantalla vuelva a estar en foco
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchMantenimientos()
+    })
+
+    // Limpiar el listener cuando el componente se desmonte
+    return unsubscribe
+  }, [navigation])
 
   // Función para cargar mantenimientos desde la API
   const fetchMantenimientos = async () => {
@@ -53,6 +61,38 @@ const MaintenanceScreen: React.FC<ScreenProps> = ({ navigation }) => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleDeleteMaintenance = (id: string) => {
+    Alert.alert(
+      "Confirmar eliminación",
+      "¿Está seguro que desea eliminar este registro de mantenimiento? Esta acción no se puede deshacer.",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              setLoading(true)
+              const response = await mantenimientosService.delete(id)
+
+              if (response.success) {
+                Alert.alert("Éxito", "Mantenimiento eliminado correctamente")
+                fetchMantenimientos() // Recargar la lista
+              } else {
+                Alert.alert("Error", response.message || "No se pudo eliminar el mantenimiento")
+              }
+            } catch (error) {
+              console.error("Error al eliminar:", error)
+              Alert.alert("Error", "Ocurrió un error al intentar eliminar el mantenimiento")
+            } finally {
+              setLoading(false)
+            }
+          },
+        },
+      ],
+    )
   }
 
   const filteredRecords = maintenanceRecords.filter((record) => {
@@ -121,10 +161,18 @@ const MaintenanceScreen: React.FC<ScreenProps> = ({ navigation }) => {
   const renderItem = ({ item }: { item: MaintenanceRecord }) => (
     <TouchableOpacity
       style={styles.itemCard}
-      onPress={() => navigation.navigate("EquipmentDetail", { itemId: item.Id_Equipos, tab: "maintenance" })}
+      onPress={() => navigation.navigate("MaintenanceForm", { maintenanceId: item.Id_Mantenimiento })}
     >
       <View style={styles.itemHeader}>
-        <Text style={styles.itemName}>{item.Marca_Equipo || `Equipo ID: ${item.Id_Equipos}`}</Text>
+        <View>
+          <Text style={styles.itemName}>{item.Marca_Equipo || `Equipo ID: ${item.Id_Equipos}`}</Text>
+          <Text style={styles.itemSubtitle}>
+            Técnico:{" "}
+            {item.Nombre_Usuario_1
+              ? `${item.Nombre_Usuario_1} ${item.Apellidos_Usuario_1 || ""}`
+              : `ID: ${item.Id_Usuario}`}
+          </Text>
+        </View>
         <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item) }]}>
           <Text style={styles.statusText}>{getStatusText(item)}</Text>
         </View>
@@ -143,19 +191,28 @@ const MaintenanceScreen: React.FC<ScreenProps> = ({ navigation }) => {
           <Ionicons name="calendar-outline" size={16} color="#666666" />
           <Text style={styles.detailText}>Hasta: {formatDate(item.Fecha_fin_mantenimiento)}</Text>
         </View>
-        <View style={styles.detailRow}>
-          <Ionicons name="person-outline" size={16} color="#666666" />
-          <Text style={styles.detailText}>
-            {item.Nombre_Usuario_1
-              ? `${item.Nombre_Usuario_1} ${item.Apellidos_Usuario_1 || ""}`
-              : `Usuario ID: ${item.Id_Usuario}`}
-          </Text>
-        </View>
       </View>
 
       <View style={styles.notesContainer}>
         <Text style={styles.notesLabel}>Observaciones:</Text>
         <Text style={styles.notesText}>{item.Observaciones}</Text>
+      </View>
+
+      <View style={styles.actionButtonsRow}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => navigation.navigate("MaintenanceForm", { maintenanceId: item.Id_Mantenimiento })}
+        >
+          <Ionicons name="create-outline" size={16} color="#007AFF" />
+          <Text style={styles.actionButtonText}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.actionButton, styles.deleteButton]}
+          onPress={() => handleDeleteMaintenance(item.Id_Mantenimiento)}
+        >
+          <Ionicons name="trash-outline" size={16} color="#F44336" />
+          <Text style={[styles.actionButtonText, styles.deleteButtonText]}>Eliminar</Text>
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   )
@@ -238,13 +295,7 @@ const MaintenanceScreen: React.FC<ScreenProps> = ({ navigation }) => {
         />
       )}
 
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          // Aquí puedes navegar a una pantalla para crear un nuevo mantenimiento
-          Alert.alert("Crear Mantenimiento", "Funcionalidad para crear un nuevo mantenimiento")
-        }}
-      >
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("MaintenanceForm")}>
         <Ionicons name="add" size={24} color="#FFFFFF" />
       </TouchableOpacity>
     </SafeAreaView>
@@ -321,14 +372,17 @@ const styles = StyleSheet.create({
   itemHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: 8,
   },
   itemName: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333333",
-    flex: 1,
+  },
+  itemSubtitle: {
+    fontSize: 14,
+    color: "#666666",
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -367,6 +421,33 @@ const styles = StyleSheet.create({
   notesText: {
     fontSize: 14,
     color: "#333333",
+  },
+  actionButtonsRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
+    paddingTop: 12,
+  },
+  actionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 4,
+    marginLeft: 8,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    color: "#007AFF",
+    marginLeft: 4,
+  },
+  deleteButton: {
+    backgroundColor: "#FFF5F5",
+  },
+  deleteButtonText: {
+    color: "#F44336",
   },
   loadingContainer: {
     flex: 1,
@@ -434,4 +515,3 @@ const styles = StyleSheet.create({
 })
 
 export default MaintenanceScreen
-

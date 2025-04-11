@@ -1,9 +1,13 @@
+"use client"
+
 import type React from "react"
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import { useState, useEffect } from "react"
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import type { ScreenProps } from "../types/navigation"
 import type { RootStackParamList, RootTabParamList } from "../types/navigation"
+import { equiposService, mantenimientosService, prestamosService } from "../services/api"
 
 // Definir los tipos para los elementos del menú
 type MenuItem = {
@@ -14,6 +18,58 @@ type MenuItem = {
 }
 
 const HomeScreen: React.FC<ScreenProps> = ({ navigation }) => {
+  // Estados para almacenar los conteos
+  const [equipmentCount, setEquipmentCount] = useState<number | null>(null)
+  const [maintenanceCount, setMaintenanceCount] = useState<number | null>(null)
+  const [loanCount, setLoanCount] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Cargar datos al montar el componente
+  useEffect(() => {
+    fetchCounts()
+
+    // Agregar un listener para recargar los datos cuando la pantalla vuelva a estar en foco
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchCounts()
+    })
+
+    // Limpiar el listener cuando el componente se desmonte
+    return unsubscribe
+  }, [navigation])
+
+  // Función para cargar los conteos desde la API
+  const fetchCounts = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+
+      // Cargar datos en paralelo
+      const [equiposResponse, mantenimientosResponse, prestamosResponse] = await Promise.all([
+        equiposService.getAll(),
+        mantenimientosService.getAll(),
+        prestamosService.getAll(),
+      ])
+
+      if (equiposResponse.success) {
+        setEquipmentCount(equiposResponse.data.length)
+      }
+
+      if (mantenimientosResponse.success) {
+        setMaintenanceCount(mantenimientosResponse.data.length)
+      }
+
+      if (prestamosResponse.success) {
+        setLoanCount(prestamosResponse.data.length)
+      }
+    } catch (error) {
+      console.error("Error al cargar datos:", error)
+      setError("No se pudieron cargar los datos. Verifica tu conexión a internet.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Definir los elementos del menú con tipos correctos
   const menuItems: MenuItem[] = [
     {
@@ -47,12 +103,6 @@ const HomeScreen: React.FC<ScreenProps> = ({ navigation }) => {
       description: "Gestionar espacios de equipos",
     },
     {
-      title: "Reportes",
-      icon: "bar-chart",
-      screen: "Reports",
-      description: "Generar informes y estadísticas",
-    },
-    {
       title: "Configuración",
       icon: "settings",
       screen: "Settings",
@@ -63,45 +113,62 @@ const HomeScreen: React.FC<ScreenProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Sistema de Gestión de Equipos</Text>
+        <Text style={styles.headerTitle}>Sistema de Gestión de Inventario Tecnologico</Text>
       </View>
 
       <ScrollView style={styles.scrollView}>
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>156</Text>
-            <Text style={styles.statLabel}>Equipos</Text>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#007AFF" />
+            <Text style={styles.loadingText}>Cargando datos...</Text>
           </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>12</Text>
-            <Text style={styles.statLabel}>Mantenimientos</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>8</Text>
-            <Text style={styles.statLabel}>Préstamos</Text>
-          </View>
-        </View>
-
-        <Text style={styles.sectionTitle}>Accesos Rápidos</Text>
-
-        <View style={styles.menuGrid}>
-          {menuItems.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.menuItem}
-              onPress={() => {
-                // Usar una aserción de tipo para indicar a TypeScript que este es un nombre de ruta válido
-                navigation.navigate(item.screen as any)
-              }}
-            >
-              <View style={styles.menuIconContainer}>
-                <Ionicons name={item.icon as any} size={24} color="#007AFF" />
-              </View>
-              <Text style={styles.menuItemTitle}>{item.title}</Text>
-              <Text style={styles.menuItemDescription}>{item.description}</Text>
+        ) : error ? (
+          <View style={styles.errorContainer}>
+            <Ionicons name="alert-circle" size={48} color="#F44336" />
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity style={styles.retryButton} onPress={fetchCounts}>
+              <Text style={styles.retryButtonText}>Reintentar</Text>
             </TouchableOpacity>
-          ))}
-        </View>
+          </View>
+        ) : (
+          <>
+            <View style={styles.statsContainer}>
+              <View style={styles.statCard}>
+                <Text style={styles.statNumber}>{equipmentCount !== null ? equipmentCount : "-"}</Text>
+                <Text style={styles.statLabel}>Equipos</Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statNumber}>{maintenanceCount !== null ? maintenanceCount : "-"}</Text>
+                <Text style={styles.statLabel}>Mantenimientos</Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statNumber}>{loanCount !== null ? loanCount : "-"}</Text>
+                <Text style={styles.statLabel}>Préstamos</Text>
+              </View>
+            </View>
+
+            <Text style={styles.sectionTitle}>Accesos Rápidos</Text>
+
+            <View style={styles.menuGrid}>
+              {menuItems.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.menuItem}
+                  onPress={() => {
+                    // Usar una aserción de tipo para indicar a TypeScript que este es un nombre de ruta válido
+                    navigation.navigate(item.screen as any)
+                  }}
+                >
+                  <View style={styles.menuIconContainer}>
+                    <Ionicons name={item.icon as any} size={24} color="#007AFF" />
+                  </View>
+                  <Text style={styles.menuItemTitle}>{item.title}</Text>
+                  <Text style={styles.menuItemDescription}>{item.description}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   )
@@ -125,6 +192,41 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#666666",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+  errorText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#666666",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: "#007AFF",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   statsContainer: {
     flexDirection: "row",
@@ -200,4 +302,3 @@ const styles = StyleSheet.create({
 })
 
 export default HomeScreen
-

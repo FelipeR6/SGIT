@@ -35,7 +35,15 @@ const LoansScreen: React.FC<ScreenProps> = ({ navigation }) => {
   // Cargar datos al montar el componente
   useEffect(() => {
     fetchPrestamos()
-  }, [])
+
+    // Agregar un listener para recargar los datos cuando la pantalla vuelva a estar en foco
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchPrestamos()
+    })
+
+    // Limpiar el listener cuando el componente se desmonte
+    return unsubscribe
+  }, [navigation])
 
   // Función para cargar préstamos desde la API
   const fetchPrestamos = async () => {
@@ -55,6 +63,38 @@ const LoansScreen: React.FC<ScreenProps> = ({ navigation }) => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleDeleteLoan = (id: string) => {
+    Alert.alert(
+      "Confirmar eliminación",
+      "¿Está seguro que desea eliminar este préstamo? Esta acción no se puede deshacer.",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              setLoading(true)
+              const response = await prestamosService.delete(id)
+
+              if (response.success) {
+                Alert.alert("Éxito", "Préstamo eliminado correctamente")
+                fetchPrestamos() // Recargar la lista
+              } else {
+                Alert.alert("Error", response.message || "No se pudo eliminar el préstamo")
+              }
+            } catch (error) {
+              console.error("Error al eliminar:", error)
+              Alert.alert("Error", "Ocurrió un error al intentar eliminar el préstamo")
+            } finally {
+              setLoading(false)
+            }
+          },
+        },
+      ],
+    )
   }
 
   const filteredRecords = loanRecords.filter((record) => {
@@ -129,10 +169,18 @@ const LoansScreen: React.FC<ScreenProps> = ({ navigation }) => {
   const renderItem = ({ item }: { item: LoanRecord }) => (
     <TouchableOpacity
       style={styles.itemCard}
-      onPress={() => navigation.navigate("EquipmentDetail", { itemId: item.Id_Equipos, tab: "loans" })}
+      onPress={() => navigation.navigate("LoanForm", { loanId: item.Id_Prestamo_Equipo })}
     >
       <View style={styles.itemHeader}>
-        <Text style={styles.itemName}>{item.Marca_Equipo || `Equipo ID: ${item.Id_Equipos}`}</Text>
+        <View>
+          <Text style={styles.itemName}>{item.Marca_Equipo || `Equipo ID: ${item.Id_Equipos}`}</Text>
+          <Text style={styles.itemSubtitle}>
+            Usuario:{" "}
+            {item.Nombre_Usuario_1
+              ? `${item.Nombre_Usuario_1} ${item.Apellidos_Usuario_1 || ""}`
+              : `ID: ${item.Id_Usuario}`}
+          </Text>
+        </View>
         <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item) }]}>
           <Text style={styles.statusText}>{getStatusText(item)}</Text>
         </View>
@@ -142,14 +190,6 @@ const LoansScreen: React.FC<ScreenProps> = ({ navigation }) => {
         <View style={styles.detailRow}>
           <Ionicons name="barcode-outline" size={16} color="#666666" />
           <Text style={styles.detailText}>Préstamo #{item.Id_Prestamo_Equipo}</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Ionicons name="person-outline" size={16} color="#666666" />
-          <Text style={styles.detailText}>
-            {item.Nombre_Usuario_1
-              ? `${item.Nombre_Usuario_1} ${item.Apellidos_Usuario_1 || ""}`
-              : `Usuario ID: ${item.Id_Usuario}`}
-          </Text>
         </View>
         <View style={styles.detailRow}>
           <Ionicons name="location-outline" size={16} color="#666666" />
@@ -174,6 +214,23 @@ const LoansScreen: React.FC<ScreenProps> = ({ navigation }) => {
           {item.Estado_Recibido && <Text style={styles.notesText}>Recibido: {item.Estado_Recibido}</Text>}
         </View>
       )}
+
+      <View style={styles.actionButtonsRow}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => navigation.navigate("LoanForm", { loanId: item.Id_Prestamo_Equipo })}
+        >
+          <Ionicons name="create-outline" size={16} color="#007AFF" />
+          <Text style={styles.actionButtonText}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.actionButton, styles.deleteButton]}
+          onPress={() => handleDeleteLoan(item.Id_Prestamo_Equipo)}
+        >
+          <Ionicons name="trash-outline" size={16} color="#F44336" />
+          <Text style={[styles.actionButtonText, styles.deleteButtonText]}>Eliminar</Text>
+        </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   )
 
@@ -257,13 +314,7 @@ const LoansScreen: React.FC<ScreenProps> = ({ navigation }) => {
         />
       )}
 
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          // Aquí puedes navegar a una pantalla para crear un nuevo préstamo
-          Alert.alert("Crear Préstamo", "Funcionalidad para crear un nuevo préstamo")
-        }}
-      >
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("LoanForm")}>
         <Ionicons name="add" size={24} color="#FFFFFF" />
       </TouchableOpacity>
     </SafeAreaView>
@@ -340,14 +391,17 @@ const styles = StyleSheet.create({
   itemHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: 8,
   },
   itemName: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333333",
-    flex: 1,
+  },
+  itemSubtitle: {
+    fontSize: 14,
+    color: "#666666",
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -389,6 +443,33 @@ const styles = StyleSheet.create({
   notesText: {
     fontSize: 14,
     color: "#333333",
+  },
+  actionButtonsRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
+    paddingTop: 12,
+  },
+  actionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 4,
+    marginLeft: 8,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    color: "#007AFF",
+    marginLeft: 4,
+  },
+  deleteButton: {
+    backgroundColor: "#FFF5F5",
+  },
+  deleteButtonText: {
+    color: "#F44336",
   },
   loadingContainer: {
     flex: 1,
@@ -456,4 +537,3 @@ const styles = StyleSheet.create({
 })
 
 export default LoansScreen
-

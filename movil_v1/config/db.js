@@ -6,7 +6,7 @@ const dbConfig = {
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "sgit",
+  database: process.env.DB_NAME || "sgit", // Asegúrate de que el nombre de la base de datos sea "sgit"
   connectionLimit: 10,
 }
 
@@ -47,4 +47,3 @@ pool.getConnection((err, connection) => {
 })
 
 module.exports = pool
-

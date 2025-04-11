@@ -17,6 +17,8 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import type { ScreenProps } from "../types/navigation"
 import { equiposService, categoriasService } from "../services/api"
+import { useTheme } from "../context/ThemeContext"
+import { createThemedStyles } from "../style/theme"
 
 // Definir la interfaz para los elementos de inventario
 interface InventoryItem {

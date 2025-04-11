@@ -15,6 +15,9 @@ export type RootStackParamList = {
   Reports: undefined
   Settings: undefined
   LocationForm: { locationId?: string }
+  MaintenanceForm: { maintenanceId?: string }
+  LoanForm: { loanId?: string }
+  UserForm: { userId?: string }
 }
 
 // Definir los parámetros para el navegador de pestañas
@@ -24,6 +27,12 @@ export type RootTabParamList = {
   Maintenance: undefined
   Loans: undefined
   Profile: undefined
+}
+
+// Definir los parámetros para el stack de autenticación
+export type AuthStackParamList = {
+  Login: undefined
+  Register: undefined
 }
 
 // Tipo de navegación compuesto para las pantallas dentro de las pestañas
@@ -45,3 +54,11 @@ export interface RouteScreenProps<T extends keyof RootStackParamList> {
   route: ScreenRouteProp<T>
 }
 
+// Tipo para la navegación de autenticación
+export type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>
+
+// Interface para las props de pantallas de autenticación
+export interface AuthScreenProps {
+  navigation: AuthNavigationProp
+  setIsAuthenticated?: (value: boolean) => void
+}

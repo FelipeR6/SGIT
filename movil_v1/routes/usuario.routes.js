@@ -323,5 +323,83 @@ router.post("/login", async (req, res) => {
   }
 })
 
+// Agregar la ruta de registro
+router.post("/register", async (req, res) => {
+  try {
+    const {
+      Usuario,
+      Nombre_Usuario_1,
+      Nombre_Usuario_2,
+      Apellidos_Usuario_1,
+      Apellidos_Usuario_2,
+      Telefono_1_Usuario,
+      Telefono_2_Usuario,
+      Correo_Usuario,
+      Contraseña,
+      Id_Rol,
+    } = req.body
+
+    // Validar datos básicos
+    if (!Usuario || !Nombre_Usuario_1 || !Apellidos_Usuario_1 || !Correo_Usuario || !Contraseña) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Los campos Usuario, Nombre_Usuario_1, Apellidos_Usuario_1, Correo_Usuario y Contraseña son requeridos",
+      })
+    }
+
+    // Verificar si el usuario ya existe
+    const usuarioExistente = await db.query("SELECT * FROM usuario WHERE Usuario = ? OR Correo_Usuario = ?", [
+      Usuario,
+      Correo_Usuario,
+    ])
+
+    if (usuarioExistente.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: "El nombre de usuario o correo ya está en uso",
+      })
+    }
+
+    // Usar el rol proporcionado o asignar el rol de usuario por defecto (3 - Docente)
+    const rolId = Id_Rol || 3
+
+    const result = await db.query(
+      "INSERT INTO usuario (Usuario, Nombre_Usuario_1, Nombre_Usuario_2, Apellidos_Usuario_1, Apellidos_Usuario_2, Telefono_1_Usuario, Telefono_2_Usuario, Correo_Usuario, Contraseña, Id_Rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        Usuario,
+        Nombre_Usuario_1,
+        Nombre_Usuario_2 || "",
+        Apellidos_Usuario_1,
+        Apellidos_Usuario_2 || "",
+        Telefono_1_Usuario || "",
+        Telefono_2_Usuario || "",
+        Correo_Usuario,
+        Contraseña,
+        rolId,
+      ],
+    )
+
+    res.status(201).json({
+      success: true,
+      message: "Usuario registrado correctamente",
+      data: {
+        Id_Usuario: result.insertId,
+        Usuario,
+        Nombre_Usuario_1,
+        Apellidos_Usuario_1,
+        Correo_Usuario,
+      },
+    })
+  } catch (error) {
+    console.error("Error al registrar usuario:", error)
+    res.status(500).json({
+      success: false,
+      message: "Error al registrar usuario",
+      error: error.message,
+    })
+  }
+})
+
 module.exports = router
 

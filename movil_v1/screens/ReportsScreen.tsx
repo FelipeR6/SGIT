@@ -6,6 +6,8 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-nati
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import type { ScreenProps } from "../types/navigation"
+import { useTheme } from "../context/ThemeContext"
+import { createThemedStyles } from "../style/theme"
 
 const ReportsScreen: React.FC<ScreenProps> = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState("inventory")

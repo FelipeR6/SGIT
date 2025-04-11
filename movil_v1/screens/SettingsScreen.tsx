@@ -6,6 +6,10 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch } from "re
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import type { ScreenProps } from "../types/navigation"
+import { useTheme } from "../context/ThemeContext"
+import { createThemedStyles } from "../style/theme"
+import { usuariosService } from "../services/api"
+import { CommonActions } from "@react-navigation/native"
 
 // Definir interfaces para los elementos de configuración
 interface SettingItem {
@@ -22,10 +26,28 @@ interface SettingSection {
 }
 
 const SettingsScreen: React.FC<ScreenProps> = ({ navigation }) => {
+  const { theme, isDarkMode, toggleTheme } = useTheme()
   const [notificationsEnabled, setNotificationsEnabled] = useState(true)
-  const [darkModeEnabled, setDarkModeEnabled] = useState(false)
   const [biometricEnabled, setBiometricEnabled] = useState(false)
   const [autoBackupEnabled, setAutoBackupEnabled] = useState(true)
+
+  const styles = getStyles(isDarkMode)
+
+  const handleLogout = async () => {
+    try {
+      await usuariosService.logout()
+
+      // Navegar a la pantalla de login
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Auth" }],
+        }),
+      )
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error)
+    }
+  }
 
   const settingsSections: SettingSection[] = [
     {
@@ -35,8 +57,8 @@ const SettingsScreen: React.FC<ScreenProps> = ({ navigation }) => {
           icon: "moon-outline",
           label: "Modo Oscuro",
           type: "switch",
-          value: darkModeEnabled,
-          onValueChange: setDarkModeEnabled,
+          value: isDarkMode,
+          onValueChange: toggleTheme,
         },
         {
           icon: "language-outline",
@@ -149,7 +171,7 @@ const SettingsScreen: React.FC<ScreenProps> = ({ navigation }) => {
         disabled={item.type === "switch" || item.type === "info"}
       >
         <View style={styles.settingItemIcon}>
-          <Ionicons name={item.icon as any} size={22} color="#007AFF" />
+          <Ionicons name={item.icon as any} size={22} color={isDarkMode ? "#0A84FF" : "#007AFF"} />
         </View>
         <Text style={styles.settingItemLabel}>{item.label}</Text>
 
@@ -157,7 +179,10 @@ const SettingsScreen: React.FC<ScreenProps> = ({ navigation }) => {
           <Switch
             value={item.value as boolean}
             onValueChange={item.onValueChange}
-            trackColor={{ false: "#D1D1D6", true: "#007AFF" }}
+            trackColor={{
+              false: isDarkMode ? "#3A3A3C" : "#D1D1D6",
+              true: isDarkMode ? "#0A84FF" : "#007AFF",
+            }}
             thumbColor={"#FFFFFF"}
           />
         )}
@@ -165,7 +190,7 @@ const SettingsScreen: React.FC<ScreenProps> = ({ navigation }) => {
         {item.type === "navigate" && (
           <View style={styles.settingItemRight}>
             {item.value && <Text style={styles.settingItemValue}>{item.value}</Text>}
-            <Ionicons name="chevron-forward" size={20} color="#CCCCCC" />
+            <Ionicons name="chevron-forward" size={20} color={isDarkMode ? "#555555" : "#CCCCCC"} />
           </View>
         )}
 
@@ -186,7 +211,7 @@ const SettingsScreen: React.FC<ScreenProps> = ({ navigation }) => {
           </View>
         ))}
 
-        <TouchableOpacity style={styles.logoutButton}>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutButtonText}>Cerrar Sesión</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -194,76 +219,80 @@ const SettingsScreen: React.FC<ScreenProps> = ({ navigation }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F5F5F5",
-  },
-  settingSection: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#666666",
-    marginHorizontal: 16,
-    marginBottom: 8,
-  },
-  settingsList: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-    marginHorizontal: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  settingItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
-  },
-  settingItemIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "#F0F8FF",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  settingItemLabel: {
-    flex: 1,
-    fontSize: 16,
-    color: "#333333",
-  },
-  settingItemRight: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  settingItemValue: {
-    fontSize: 14,
-    color: "#999999",
-    marginRight: 8,
-  },
-  logoutButton: {
-    backgroundColor: "#F44336",
-    borderRadius: 8,
-    padding: 16,
-    alignItems: "center",
-    marginHorizontal: 16,
-    marginBottom: 24,
-  },
-  logoutButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-})
+const getStyles = (isDarkMode: boolean) => {
+  const themed = createThemedStyles(isDarkMode)
+  const colors = themed.colors
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    settingSection: {
+      marginBottom: 24,
+    },
+    sectionTitle: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: colors.textSecondary,
+      marginHorizontal: 16,
+      marginBottom: 8,
+    },
+    settingsList: {
+      backgroundColor: colors.card,
+      borderRadius: 8,
+      marginHorizontal: 16,
+      shadowColor: isDarkMode ? "#000000" : "#000000",
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: isDarkMode ? 0.3 : 0.1,
+      shadowRadius: 2,
+      elevation: 2,
+    },
+    settingItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    settingItemIcon: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      backgroundColor: isDarkMode ? "rgba(10, 132, 255, 0.1)" : "#F0F8FF",
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: 16,
+    },
+    settingItemLabel: {
+      flex: 1,
+      fontSize: 16,
+      color: colors.text,
+    },
+    settingItemRight: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    settingItemValue: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginRight: 8,
+    },
+    logoutButton: {
+      backgroundColor: colors.danger,
+      borderRadius: 8,
+      padding: 16,
+      alignItems: "center",
+      marginHorizontal: 16,
+      marginBottom: 24,
+    },
+    logoutButtonText: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      fontWeight: "bold",
+    },
+  })
+}
 
 export default SettingsScreen
-

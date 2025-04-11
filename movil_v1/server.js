@@ -5,14 +5,14 @@ const server = http.createServer(app)
 const logger = require("morgan")
 const cors = require("cors")
 
-// Importar rutas - Asegúrate de que el nombre del archivo sea correcto
-const equipoRoutes = require("./routes/equipo.routes") // Cambiado de equipos.routes a equipo.routes
+// Importar rutas
+const equipoRoutes = require("./routes/equipo.routes")
 const categoriaRoutes = require("./routes/categoria.routes")
 const mantenimientoRoutes = require("./routes/mantenimiento.routes")
 const prestamo_equipoRoutes = require("./routes/prestamo_equipo.routes")
 const usuarioRoutes = require("./routes/usuario.routes")
-// Agregar esta línea después de las importaciones de rutas existentes
 const ubicacionRoutes = require("./routes/ubicacion.routes")
+const modeloRoutes = require("./routes/modelo.routes")
 
 const port = process.env.PORT || 3000
 app.use(logger("dev"))
@@ -24,13 +24,13 @@ app.disable("x-powered-by")
 app.set("port", port)
 
 // Usar rutas
-app.use("/api/equipo", equipoRoutes) // Asegúrate de que esta línea esté correcta
+app.use("/api/equipo", equipoRoutes)
 app.use("/api/categoria", categoriaRoutes)
 app.use("/api/mantenimiento", mantenimientoRoutes)
 app.use("/api/prestamo_equipo", prestamo_equipoRoutes)
 app.use("/api/usuario", usuarioRoutes)
-// Agregar esta línea después de las líneas app.use existentes
 app.use("/api/ubicacion", ubicacionRoutes)
+app.use("/api/modelo", modeloRoutes)
 
 // Ruta raíz para verificar que el servidor está funcionando
 app.get("/", (req, res) => {
@@ -40,10 +40,6 @@ app.get("/", (req, res) => {
 // Agregar rutas de prueba para diagnóstico
 app.get("/api/test", (req, res) => {
   res.json({ message: "La API está funcionando correctamente" })
-})
-
-app.get("/api/equipo/test", (req, res) => {
-  res.json({ message: "La ruta /api/equipo está configurada correctamente" })
 })
 
 // Direccion ip V4 de la maquina, consultar con ipconfig
@@ -79,4 +75,3 @@ app.use((err, req, res, next) => {
   console.log(err)
   res.status(err.status || 500).send(err.stack)
 })
-

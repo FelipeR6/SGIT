@@ -1,45 +1,87 @@
+"use client"
+
 import type React from "react"
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native"
+import { useState, useEffect } from "react"
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { CommonActions } from "@react-navigation/native"
 import type { ScreenProps } from "../types/navigation"
+import { useTheme } from "../context/ThemeContext"
+import { createThemedStyles } from "../style/theme"
 
 // Definir la interfaz para el usuario
 interface UserProfile {
-  id: string
-  name: string
-  email: string
-  role: string
-  department: string
-  phone: string
-  profileImage: string | null
-  activeLoans: number
-  pendingMaintenance: number
-}
-
-// Definir la interfaz para los elementos del menú
-interface MenuItem {
-  title: string
-  icon: string
-  onPress: () => void
-  danger?: boolean
+  Id_Usuario: string
+  Usuario: string
+  Nombre_Usuario_1: string
+  Nombre_Usuario_2?: string
+  Apellidos_Usuario_1: string
+  Apellidos_Usuario_2?: string
+  Correo_Usuario: string
+  Telefono_1_Usuario?: string
+  Telefono_2_Usuario?: string
+  Id_Rol: string
+  Nombre_Rol?: string
+  profileImage?: string | null
 }
 
 const ProfileScreen: React.FC<ScreenProps> = ({ navigation }) => {
-  // Mock user data
-  const user: UserProfile = {
-    id: "USR-001",
-    name: "Juan Pérez",
-    email: "juan.perez@empresa.com",
-    role: "Administrador",
-    department: "Tecnología",
-    phone: "+1 234 567 8901",
-    profileImage: null, // We'll use a placeholder
-    activeLoans: 2,
-    pendingMaintenance: 1,
+  const [user, setUser] = useState<UserProfile | null>(null)
+  const [loading, setLoading] = useState(true)
+  const { isDarkMode } = useTheme()
+  const styles = getStyles(isDarkMode)
+
+  useEffect(() => {
+    loadUserData()
+  }, [])
+
+  const loadUserData = async () => {
+    try {
+      const userData = await AsyncStorage.getItem("userData")
+      if (userData) {
+        setUser(JSON.parse(userData))
+      }
+    } catch (error) {
+      console.error("Error loading user data:", error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const menuItems: MenuItem[] = [
+  const handleLogout = async () => {
+    Alert.alert("Cerrar Sesión", "¿Estás seguro que deseas cerrar sesión?", [
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+      {
+        text: "Sí, cerrar sesión",
+        onPress: async () => {
+          try {
+            // Limpiar AsyncStorage
+            await AsyncStorage.removeItem("userData")
+            await AsyncStorage.removeItem("token")
+
+            // Navegar a la pantalla de login
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "Auth" }],
+              }),
+            )
+          } catch (error) {
+            console.error("Error al cerrar sesión:", error)
+            Alert.alert("Error", "No se pudo cerrar sesión correctamente")
+          }
+        },
+      },
+    ])
+  }
+
+  // Definir los elementos del menú
+  const menuItems = [
     {
       title: "Información Personal",
       icon: "person",
@@ -73,10 +115,29 @@ const ProfileScreen: React.FC<ScreenProps> = ({ navigation }) => {
     {
       title: "Cerrar Sesión",
       icon: "log-out",
-      onPress: () => console.log("Logout"),
+      onPress: handleLogout,
       danger: true,
     },
   ]
+
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <Text style={styles.loadingText}>Cargando perfil...</Text>
+      </View>
+    )
+  }
+
+  if (!user) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <Text style={styles.errorText}>No se pudo cargar la información del usuario</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={loadUserData}>
+          <Text style={styles.retryButtonText}>Reintentar</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -88,44 +149,32 @@ const ProfileScreen: React.FC<ScreenProps> = ({ navigation }) => {
             ) : (
               <View style={styles.profileImagePlaceholder}>
                 <Text style={styles.profileImagePlaceholderText}>
-                  {user.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
+                  {`${user.Nombre_Usuario_1.charAt(0)}${user.Apellidos_Usuario_1.charAt(0)}`}
                 </Text>
               </View>
             )}
           </View>
 
-          <Text style={styles.userName}>{user.name}</Text>
+          <Text style={styles.userName}>{`${user.Nombre_Usuario_1} ${user.Apellidos_Usuario_1}`}</Text>
           <Text style={styles.userRole}>
-            {user.role} - {user.department}
+            {user.Nombre_Rol || "Usuario"} - ID: {user.Id_Usuario}
           </Text>
 
           <View style={styles.userInfoContainer}>
             <View style={styles.userInfoItem}>
-              <Ionicons name="mail-outline" size={16} color="#666666" />
-              <Text style={styles.userInfoText}>{user.email}</Text>
+              <Ionicons name="mail-outline" size={16} color={isDarkMode ? "#AAAAAA" : "#666666"} />
+              <Text style={styles.userInfoText}>{user.Correo_Usuario}</Text>
             </View>
+            {user.Telefono_1_Usuario && (
+              <View style={styles.userInfoItem}>
+                <Ionicons name="call-outline" size={16} color={isDarkMode ? "#AAAAAA" : "#666666"} />
+                <Text style={styles.userInfoText}>{user.Telefono_1_Usuario}</Text>
+              </View>
+            )}
             <View style={styles.userInfoItem}>
-              <Ionicons name="call-outline" size={16} color="#666666" />
-              <Text style={styles.userInfoText}>{user.phone}</Text>
+              <Ionicons name="person-outline" size={16} color={isDarkMode ? "#AAAAAA" : "#666666"} />
+              <Text style={styles.userInfoText}>@{user.Usuario}</Text>
             </View>
-            <View style={styles.userInfoItem}>
-              <Ionicons name="id-card-outline" size={16} color="#666666" />
-              <Text style={styles.userInfoText}>ID: {user.id}</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{user.activeLoans}</Text>
-            <Text style={styles.statLabel}>Préstamos Activos</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{user.pendingMaintenance}</Text>
-            <Text style={styles.statLabel}>Mantenimientos Pendientes</Text>
           </View>
         </View>
 
@@ -133,10 +182,14 @@ const ProfileScreen: React.FC<ScreenProps> = ({ navigation }) => {
           {menuItems.map((item, index) => (
             <TouchableOpacity key={index} style={styles.menuItem} onPress={item.onPress}>
               <View style={[styles.menuIconContainer, item.danger && styles.menuIconContainerDanger]}>
-                <Ionicons name={item.icon as any} size={20} color={item.danger ? "#F44336" : "#007AFF"} />
+                <Ionicons
+                  name={item.icon as any}
+                  size={20}
+                  color={item.danger ? "#F44336" : isDarkMode ? "#0A84FF" : "#007AFF"}
+                />
               </View>
               <Text style={[styles.menuItemText, item.danger && styles.menuItemTextDanger]}>{item.title}</Text>
-              <Ionicons name="chevron-forward" size={20} color="#CCCCCC" />
+              <Ionicons name="chevron-forward" size={20} color={isDarkMode ? "#555555" : "#CCCCCC"} />
             </TouchableOpacity>
           ))}
         </View>
@@ -145,129 +198,128 @@ const ProfileScreen: React.FC<ScreenProps> = ({ navigation }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F5F5F5",
-  },
-  header: {
-    backgroundColor: "#FFFFFF",
-    padding: 20,
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
-  },
-  profileImageContainer: {
-    marginBottom: 16,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  profileImagePlaceholder: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "#007AFF",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  profileImagePlaceholderText: {
-    fontSize: 36,
-    color: "#FFFFFF",
-    fontWeight: "bold",
-  },
-  userName: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#333333",
-    marginBottom: 4,
-  },
-  userRole: {
-    fontSize: 16,
-    color: "#666666",
-    marginBottom: 16,
-  },
-  userInfoContainer: {
-    width: "100%",
-  },
-  userInfoItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  userInfoText: {
-    fontSize: 14,
-    color: "#666666",
-    marginLeft: 8,
-  },
-  statsContainer: {
-    flexDirection: "row",
-    padding: 16,
-    justifyContent: "space-around",
-  },
-  statCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-    padding: 16,
-    width: "45%",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#007AFF",
-  },
-  statLabel: {
-    fontSize: 12,
-    color: "#666666",
-    marginTop: 4,
-    textAlign: "center",
-  },
-  menuContainer: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-    margin: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
-  },
-  menuIconContainer: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "#F0F8FF",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  menuIconContainerDanger: {
-    backgroundColor: "#FFEBEE",
-  },
-  menuItemText: {
-    flex: 1,
-    fontSize: 16,
-    color: "#333333",
-  },
-  menuItemTextDanger: {
-    color: "#F44336",
-  },
-})
+const getStyles = (isDarkMode: boolean) => {
+  const themed = createThemedStyles(isDarkMode)
+  const colors = themed.colors
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    loadingContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    loadingText: {
+      color: colors.text,
+      fontSize: 16,
+    },
+    errorText: {
+      color: colors.danger,
+      fontSize: 16,
+    },
+    retryButton: {
+      marginTop: 16,
+      backgroundColor: colors.primary,
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 8,
+    },
+    retryButtonText: {
+      color: "#FFFFFF",
+      fontWeight: "bold",
+    },
+    header: {
+      backgroundColor: colors.card,
+      padding: 20,
+      alignItems: "center",
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    profileImageContainer: {
+      marginBottom: 16,
+    },
+    profileImage: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+    },
+    profileImagePlaceholder: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      backgroundColor: colors.primary,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    profileImagePlaceholderText: {
+      fontSize: 36,
+      color: "#FFFFFF",
+      fontWeight: "bold",
+    },
+    userName: {
+      fontSize: 24,
+      fontWeight: "bold",
+      color: colors.text,
+      marginBottom: 4,
+    },
+    userRole: {
+      fontSize: 16,
+      color: colors.textSecondary,
+      marginBottom: 16,
+    },
+    userInfoContainer: {
+      width: "100%",
+    },
+    userInfoItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 8,
+    },
+    userInfoText: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginLeft: 8,
+    },
+    menuContainer: {
+      backgroundColor: colors.card,
+      borderRadius: 8,
+      margin: 16,
+      shadowColor: isDarkMode ? "#000000" : "#000000",
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: isDarkMode ? 0.3 : 0.1,
+      shadowRadius: 2,
+      elevation: 2,
+    },
+    menuItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      padding: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    menuIconContainer: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      backgroundColor: isDarkMode ? "rgba(10, 132, 255, 0.1)" : "#F0F8FF",
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: 16,
+    },
+    menuIconContainerDanger: {
+      backgroundColor: isDarkMode ? "rgba(255, 69, 58, 0.1)" : "#FFEBEE",
+    },
+    menuItemText: {
+      flex: 1,
+      fontSize: 16,
+      color: colors.text,
+    },
+    menuItemTextDanger: {
+      color: colors.danger,
+    },
+  })
+}
 
 export default ProfileScreen
-

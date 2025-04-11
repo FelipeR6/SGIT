@@ -18,6 +18,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context"
 import type { RouteScreenProps } from "../types/navigation"
 import { ubicacionesService } from "../services/api"
+import { useTheme } from "../context/ThemeContext"
+import { createThemedStyles } from "../style/theme"
 
 // Definir la interfaz para el formulario de ubicación
 interface LocationFormData {

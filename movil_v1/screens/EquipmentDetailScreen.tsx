@@ -1,101 +1,300 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native"
+import { useState, useEffect } from "react"
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+  Modal,
+  TextInput,
+} from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import type { RouteScreenProps } from "../types/navigation"
+import { equiposService, categoriasService, modelosService } from "../services/api"
+import { Picker } from "@react-native-picker/picker"
+
+// Definir interfaces para los datos
+interface Equipment {
+  Id_Equipos: string
+  Marca_Equipo: string
+  Año_Equipo: number
+  Id_Categoria: string
+  Id_Modelo: string
+  Id_Usuario: string
+  Nombre_Categoria?: string
+  Caracteristicas_Modelo?: string
+  Accesorios_Modelo?: string
+  Nombre_Usuario_1?: string
+  Apellidos_Usuario_1?: string
+  Estado_Entregado?: string
+  Estado_Recibido?: string
+  mantenimientos?: Maintenance[]
+  prestamos?: Loan[]
+  hojaVida?: LifeCycle[]
+}
+
+interface Maintenance {
+  Id_Mantenimiento: string
+  Fecha_Inicio_mantenimiento: string
+  Fecha_fin_mantenimiento: string
+  Observaciones: string
+  Id_Equipos: string
+  Id_Usuario: string
+  Nombre_Usuario_1?: string
+  Apellidos_Usuario_1?: string
+}
+
+interface Loan {
+  Id_Prestamo_Equipo: string
+  Fecha_Prestamo_Equipo: string
+  Fecha_entrega_prestamo: string
+  Id_Usuario: string
+  Id_Equipos: string
+  Id_Ubicacion: string
+  Id_Estado_Equipo: string
+  Nombre_Usuario_1?: string
+  Apellidos_Usuario_1?: string
+  Nombre_Ubicacion?: string
+}
+
+interface LifeCycle {
+  Id_Hoja_vida_equipo: string
+  Estado_Equipo: string
+  Fecha_ingreso: string
+  Id_usuario: string
+  Nombre_Usuario_1?: string
+  Apellidos_Usuario_1?: string
+}
+
+interface Category {
+  Id_Categoria: string
+  Nombre_Categoria: string
+}
+
+interface Model {
+  Id_Modelo: string
+  Caracteristicas_Modelo: string
+  Accesorios_Modelo: string
+}
 
 const EquipmentDetailScreen: React.FC<RouteScreenProps<"EquipmentDetail">> = ({ route, navigation }) => {
   const { itemId, tab } = route.params || {}
   const [activeTab, setActiveTab] = useState(tab || "info")
+  const [equipment, setEquipment] = useState<Equipment | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [editModalVisible, setEditModalVisible] = useState(false)
+  const [editFormData, setEditFormData] = useState<Partial<Equipment>>({})
+  const [categories, setCategories] = useState<Category[]>([])
+  const [models, setModels] = useState<Model[]>([])
+  const [savingChanges, setSavingChanges] = useState(false)
+  // Agregar un estado para el modal de cambio de estado
+  const [statusModalVisible, setStatusModalVisible] = useState(false)
+  const [newStatus, setNewStatus] = useState("")
 
-  // Mock equipment data
-  const equipment = {
-    id: "EQ-001",
-    name: "Laptop Dell XPS 13",
-    category: "Computadoras",
-    status: "Disponible",
-    location: "Oficina Principal",
-    serialNumber: "SN-12345678",
-    model: "XPS 13 9310",
-    brand: "Dell",
-    purchaseDate: "2022-01-15",
-    warrantyExpiration: "2025-01-15",
-    value: "$1,299.00",
-    specifications: [
-      { label: "Procesador", value: "Intel Core i7-1165G7" },
-      { label: "RAM", value: "16GB LPDDR4x" },
-      { label: "Almacenamiento", value: "512GB SSD" },
-      { label: "Pantalla", value: '13.4" FHD+ (1920 x 1200)' },
-      { label: "Sistema Operativo", value: "Windows 11 Pro" },
-    ],
-    maintenanceHistory: [
-      {
-        id: "M001",
-        type: "Preventivo",
-        date: "2022-07-15",
-        technician: "Carlos Rodríguez",
-        description: "Limpieza de ventiladores y actualización de software",
-        status: "Completado",
-      },
-      {
-        id: "M002",
-        type: "Correctivo",
-        date: "2022-11-10",
-        technician: "Ana Martínez",
-        description: "Reemplazo de batería",
-        status: "Completado",
-      },
-      {
-        id: "M003",
-        type: "Preventivo",
-        date: "2023-01-20",
-        technician: "Carlos Rodríguez",
-        description: "Actualización de BIOS y drivers",
-        status: "Completado",
-      },
-    ],
-    loanHistory: [
-      {
-        id: "L001",
-        borrower: "Juan Pérez",
-        department: "Desarrollo",
-        startDate: "2022-03-10",
-        endDate: "2022-03-25",
-        status: "Devuelto",
-      },
-      {
-        id: "L002",
-        borrower: "María López",
-        department: "Marketing",
-        startDate: "2022-06-05",
-        endDate: "2022-06-15",
-        status: "Devuelto",
-      },
-      {
-        id: "L003",
-        borrower: "Juan Pérez",
-        department: "Desarrollo",
-        startDate: "2023-02-01",
-        endDate: "2023-02-15",
-        status: "Devuelto",
-      },
-    ],
+  // Cargar datos del equipo
+  useEffect(() => {
+    if (itemId && itemId !== "new") {
+      fetchEquipmentData()
+    } else {
+      setLoading(false)
+    }
+  }, [itemId])
+
+  // Cargar categorías y modelos para el formulario de edición
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const [categoriesResponse, modelsResponse] = await Promise.all([
+          categoriasService.getAll(),
+          modelosService.getAll(),
+        ])
+
+        if (categoriesResponse.success) {
+          setCategories(categoriesResponse.data)
+        }
+
+        if (modelsResponse.success) {
+          setModels(modelsResponse.data)
+        }
+      } catch (error) {
+        console.error("Error al cargar datos para el formulario:", error)
+      }
+    }
+
+    loadFormData()
+  }, [])
+
+  // Cuando se abre el modal de edición, inicializar el formulario con los datos actuales
+  useEffect(() => {
+    if (equipment && editModalVisible) {
+      setEditFormData({
+        Marca_Equipo: equipment.Marca_Equipo,
+        Año_Equipo: equipment.Año_Equipo,
+        Id_Categoria: equipment.Id_Categoria,
+        Id_Modelo: equipment.Id_Modelo,
+        Id_Usuario: equipment.Id_Usuario,
+      })
+    }
+  }, [equipment, editModalVisible])
+
+  // Modificar la función fetchEquipmentData para manejar mejor los errores
+  const fetchEquipmentData = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+
+      try {
+        const response = await equiposService.getById(itemId)
+
+        if (response.success) {
+          setEquipment(response.data)
+        } else {
+          setError("No se pudo cargar la información del equipo: " + (response.message || "Error desconocido"))
+        }
+      } catch (error) {
+        console.error("Error al cargar datos del equipo:", error)
+
+        // Intentar mostrar un mensaje más específico
+        let errorMessage = "Error de conexión al servidor."
+
+        if (error.message) {
+          errorMessage = error.message
+        }
+
+        setError(`${errorMessage} Verifica que el servidor esté en ejecución y que la URL de la API sea correcta.`)
+      }
+    } catch (error) {
+      console.error("Error general:", error)
+      setError("Error inesperado al cargar los datos")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSaveChanges = async () => {
+    if (!editFormData.Marca_Equipo || !editFormData.Año_Equipo) {
+      Alert.alert("Error", "Por favor complete todos los campos obligatorios")
+      return
+    }
+
+    try {
+      setSavingChanges(true)
+
+      const response = await equiposService.update(itemId, editFormData)
+
+      if (response.success) {
+        Alert.alert("Éxito", "Equipo actualizado correctamente")
+        setEditModalVisible(false)
+        fetchEquipmentData() // Recargar los datos
+      } else {
+        Alert.alert("Error", response.message || "No se pudo actualizar el equipo")
+      }
+    } catch (error) {
+      console.error("Error al actualizar equipo:", error)
+      Alert.alert("Error", "Ocurrió un error al guardar los cambios")
+    } finally {
+      setSavingChanges(false)
+    }
+  }
+
+  const handleDeleteEquipment = () => {
+    Alert.alert(
+      "Confirmar eliminación",
+      "¿Está seguro que desea eliminar este equipo? Esta acción no se puede deshacer.",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              setLoading(true)
+              const response = await equiposService.delete(itemId)
+
+              if (response.success) {
+                Alert.alert("Éxito", "Equipo eliminado correctamente", [
+                  { text: "OK", onPress: () => navigation.goBack() },
+                ])
+              } else {
+                Alert.alert("Error", response.message || "No se pudo eliminar el equipo")
+                setLoading(false)
+              }
+            } catch (error) {
+              console.error("Error al eliminar equipo:", error)
+              Alert.alert("Error", "Ocurrió un error al eliminar el equipo")
+              setLoading(false)
+            }
+          },
+        },
+      ],
+    )
+  }
+
+  // Agregar esta función después de handleDeleteEquipment
+  const handleChangeStatus = async () => {
+    if (!newStatus) {
+      Alert.alert("Error", "Por favor seleccione un estado")
+      return
+    }
+
+    try {
+      setLoading(true)
+
+      // Crear un objeto con los datos actualizados
+      const updatedEquipment = {
+        ...equipment,
+        Estado_Recibido: newStatus,
+      }
+
+      // Llamar al servicio para actualizar el equipo
+      const response = await equiposService.update(itemId, updatedEquipment)
+
+      if (response.success) {
+        Alert.alert("Éxito", "Estado del equipo actualizado correctamente")
+        // Actualizar el estado local
+        setEquipment({
+          ...equipment,
+          Estado_Recibido: newStatus,
+        })
+        setStatusModalVisible(false)
+      } else {
+        Alert.alert("Error", response.message || "No se pudo actualizar el estado del equipo")
+      }
+    } catch (error) {
+      console.error("Error al cambiar el estado del equipo:", error)
+      Alert.alert("Error", "Ocurrió un error al cambiar el estado del equipo")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Disponible":
-        return "#4CAF50"
-      case "En préstamo":
-        return "#FFC107"
-      case "En mantenimiento":
-        return "#F44336"
-      default:
-        return "#757575"
+    if (status.includes("Funcionamiento") || status.includes("Optimo")) {
+      return "#4CAF50"
+    } else if (status.includes("Bajo rendimiento") || status.includes("cable")) {
+      return "#FFC107"
+    } else if (status.includes("Dañado") || status.includes("Fuera de servicio")) {
+      return "#F44336"
+    } else {
+      return "#757575"
     }
+  }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })
   }
 
   const renderInfoTab = () => (
@@ -104,50 +303,55 @@ const EquipmentDetailScreen: React.FC<RouteScreenProps<"EquipmentDetail">> = ({ 
         <Text style={styles.sectionTitle}>Información General</Text>
         <View style={styles.specificationItem}>
           <Text style={styles.specificationLabel}>ID:</Text>
-          <Text style={styles.specificationValue}>{equipment.id}</Text>
-        </View>
-        <View style={styles.specificationItem}>
-          <Text style={styles.specificationLabel}>Categoría:</Text>
-          <Text style={styles.specificationValue}>{equipment.category}</Text>
+          <Text style={styles.specificationValue}>{equipment?.Id_Equipos}</Text>
         </View>
         <View style={styles.specificationItem}>
           <Text style={styles.specificationLabel}>Marca:</Text>
-          <Text style={styles.specificationValue}>{equipment.brand}</Text>
+          <Text style={styles.specificationValue}>{equipment?.Marca_Equipo}</Text>
         </View>
         <View style={styles.specificationItem}>
-          <Text style={styles.specificationLabel}>Modelo:</Text>
-          <Text style={styles.specificationValue}>{equipment.model}</Text>
+          <Text style={styles.specificationLabel}>Año:</Text>
+          <Text style={styles.specificationValue}>{equipment?.Año_Equipo}</Text>
         </View>
         <View style={styles.specificationItem}>
-          <Text style={styles.specificationLabel}>Número de Serie:</Text>
-          <Text style={styles.specificationValue}>{equipment.serialNumber}</Text>
+          <Text style={styles.specificationLabel}>Categoría:</Text>
+          <Text style={styles.specificationValue}>{equipment?.Nombre_Categoria || "No especificada"}</Text>
         </View>
         <View style={styles.specificationItem}>
-          <Text style={styles.specificationLabel}>Ubicación:</Text>
-          <Text style={styles.specificationValue}>{equipment.location}</Text>
+          <Text style={styles.specificationLabel}>Estado Actual:</Text>
+          <View style={styles.statusContainer}>
+            <Text style={styles.specificationValue}>{equipment?.Estado_Recibido || "No especificado"}</Text>
+            <TouchableOpacity
+              style={styles.changeStatusButton}
+              onPress={() => {
+                setNewStatus(equipment?.Estado_Recibido || "")
+                setStatusModalVisible(true)
+              }}
+            >
+              <Text style={styles.changeStatusButtonText}>Cambiar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.specificationItem}>
-          <Text style={styles.specificationLabel}>Fecha de Compra:</Text>
-          <Text style={styles.specificationValue}>{equipment.purchaseDate}</Text>
-        </View>
-        <View style={styles.specificationItem}>
-          <Text style={styles.specificationLabel}>Garantía hasta:</Text>
-          <Text style={styles.specificationValue}>{equipment.warrantyExpiration}</Text>
-        </View>
-        <View style={styles.specificationItem}>
-          <Text style={styles.specificationLabel}>Valor:</Text>
-          <Text style={styles.specificationValue}>{equipment.value}</Text>
+          <Text style={styles.specificationLabel}>Responsable:</Text>
+          <Text style={styles.specificationValue}>
+            {equipment?.Nombre_Usuario_1
+              ? `${equipment.Nombre_Usuario_1} ${equipment.Apellidos_Usuario_1 || ""}`
+              : "No asignado"}
+          </Text>
         </View>
       </View>
 
       <View style={styles.specificationContainer}>
         <Text style={styles.sectionTitle}>Especificaciones Técnicas</Text>
-        {equipment.specifications.map((spec, index) => (
-          <View key={index} style={styles.specificationItem}>
-            <Text style={styles.specificationLabel}>{spec.label}:</Text>
-            <Text style={styles.specificationValue}>{spec.value}</Text>
-          </View>
-        ))}
+        <View style={styles.specificationItem}>
+          <Text style={styles.specificationLabel}>Características:</Text>
+          <Text style={styles.specificationValue}>{equipment?.Caracteristicas_Modelo || "No especificadas"}</Text>
+        </View>
+        <View style={styles.specificationItem}>
+          <Text style={styles.specificationLabel}>Accesorios:</Text>
+          <Text style={styles.specificationValue}>{equipment?.Accesorios_Modelo || "No especificados"}</Text>
+        </View>
       </View>
     </View>
   )
@@ -155,83 +359,212 @@ const EquipmentDetailScreen: React.FC<RouteScreenProps<"EquipmentDetail">> = ({ 
   const renderMaintenanceTab = () => (
     <View style={styles.tabContent}>
       <Text style={styles.sectionTitle}>Historial de Mantenimiento</Text>
-      {equipment.maintenanceHistory.map((maintenance, index) => (
-        <View key={index} style={styles.historyCard}>
-          <View style={styles.historyCardHeader}>
-            <View>
-              <Text style={styles.historyCardTitle}>{maintenance.type}</Text>
-              <Text style={styles.historyCardSubtitle}>ID: {maintenance.id}</Text>
+      {equipment?.mantenimientos && equipment.mantenimientos.length > 0 ? (
+        equipment.mantenimientos.map((maintenance, index) => (
+          <View key={index} style={styles.historyCard}>
+            <View style={styles.historyCardHeader}>
+              <View>
+                <Text style={styles.historyCardTitle}>Mantenimiento #{maintenance.Id_Mantenimiento}</Text>
+                <Text style={styles.historyCardSubtitle}>
+                  Técnico:{" "}
+                  {maintenance.Nombre_Usuario_1
+                    ? `${maintenance.Nombre_Usuario_1} ${maintenance.Apellidos_Usuario_1 || ""}`
+                    : `ID: ${maintenance.Id_Usuario}`}
+                </Text>
+              </View>
+              <View style={[styles.statusBadge, { backgroundColor: "#4CAF50" }]}>
+                <Text style={styles.statusText}>Completado</Text>
+              </View>
             </View>
-            <View style={[styles.statusBadge, { backgroundColor: "#4CAF50" }]}>
-              <Text style={styles.statusText}>{maintenance.status}</Text>
+            <View style={styles.historyCardContent}>
+              <View style={styles.historyCardItem}>
+                <Ionicons name="calendar-outline" size={16} color="#666666" />
+                <Text style={styles.historyCardItemText}>
+                  Inicio: {formatDate(maintenance.Fecha_Inicio_mantenimiento)}
+                </Text>
+              </View>
+              <View style={styles.historyCardItem}>
+                <Ionicons name="calendar-outline" size={16} color="#666666" />
+                <Text style={styles.historyCardItemText}>Fin: {formatDate(maintenance.Fecha_fin_mantenimiento)}</Text>
+              </View>
+              <View style={styles.historyCardItem}>
+                <Ionicons name="document-text-outline" size={16} color="#666666" />
+                <Text style={styles.historyCardItemText}>{maintenance.Observaciones}</Text>
+              </View>
             </View>
           </View>
-          <View style={styles.historyCardContent}>
-            <View style={styles.historyCardItem}>
-              <Ionicons name="calendar-outline" size={16} color="#666666" />
-              <Text style={styles.historyCardItemText}>{maintenance.date}</Text>
-            </View>
-            <View style={styles.historyCardItem}>
-              <Ionicons name="person-outline" size={16} color="#666666" />
-              <Text style={styles.historyCardItemText}>{maintenance.technician}</Text>
-            </View>
-            <View style={styles.historyCardItem}>
-              <Ionicons name="document-text-outline" size={16} color="#666666" />
-              <Text style={styles.historyCardItemText}>{maintenance.description}</Text>
-            </View>
-          </View>
+        ))
+      ) : (
+        <View style={styles.emptyStateContainer}>
+          <Ionicons name="construct-outline" size={48} color="#CCCCCC" />
+          <Text style={styles.emptyStateText}>No hay registros de mantenimiento</Text>
         </View>
-      ))}
-
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Programar Mantenimiento</Text>
-      </TouchableOpacity>
+      )}
     </View>
   )
 
   const renderLoansTab = () => (
     <View style={styles.tabContent}>
       <Text style={styles.sectionTitle}>Historial de Préstamos</Text>
-      {equipment.loanHistory.map((loan, index) => (
-        <View key={index} style={styles.historyCard}>
-          <View style={styles.historyCardHeader}>
-            <View>
-              <Text style={styles.historyCardTitle}>{loan.borrower}</Text>
-              <Text style={styles.historyCardSubtitle}>{loan.department}</Text>
+      {equipment?.prestamos && equipment.prestamos.length > 0 ? (
+        equipment.prestamos.map((loan, index) => (
+          <View key={index} style={styles.historyCard}>
+            <View style={styles.historyCardHeader}>
+              <View>
+                <Text style={styles.historyCardTitle}>
+                  {loan.Nombre_Usuario_1
+                    ? `${loan.Nombre_Usuario_1} ${loan.Apellidos_Usuario_1 || ""}`
+                    : `Usuario ID: ${loan.Id_Usuario}`}
+                </Text>
+                <Text style={styles.historyCardSubtitle}>
+                  Ubicación: {loan.Nombre_Ubicacion || `ID: ${loan.Id_Ubicacion}`}
+                </Text>
+              </View>
+              <View style={[styles.statusBadge, { backgroundColor: "#9E9E9E" }]}>
+                <Text style={styles.statusText}>Completado</Text>
+              </View>
             </View>
-            <View style={[styles.statusBadge, { backgroundColor: "#9E9E9E" }]}>
-              <Text style={styles.statusText}>{loan.status}</Text>
+            <View style={styles.historyCardContent}>
+              <View style={styles.historyCardItem}>
+                <Ionicons name="calendar-outline" size={16} color="#666666" />
+                <Text style={styles.historyCardItemText}>Desde: {formatDate(loan.Fecha_Prestamo_Equipo)}</Text>
+              </View>
+              <View style={styles.historyCardItem}>
+                <Ionicons name="calendar-outline" size={16} color="#666666" />
+                <Text style={styles.historyCardItemText}>Hasta: {formatDate(loan.Fecha_entrega_prestamo)}</Text>
+              </View>
             </View>
           </View>
-          <View style={styles.historyCardContent}>
-            <View style={styles.historyCardItem}>
-              <Ionicons name="calendar-outline" size={16} color="#666666" />
-              <Text style={styles.historyCardItemText}>Desde: {loan.startDate}</Text>
-            </View>
-            <View style={styles.historyCardItem}>
-              <Ionicons name="calendar-outline" size={16} color="#666666" />
-              <Text style={styles.historyCardItemText}>Hasta: {loan.endDate}</Text>
-            </View>
-          </View>
+        ))
+      ) : (
+        <View style={styles.emptyStateContainer}>
+          <Ionicons name="swap-horizontal-outline" size={48} color="#CCCCCC" />
+          <Text style={styles.emptyStateText}>No hay registros de préstamos</Text>
         </View>
-      ))}
-
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Solicitar Préstamo</Text>
-      </TouchableOpacity>
+      )}
     </View>
   )
 
+  const renderEditModal = () => (
+    <Modal
+      visible={editModalVisible}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={() => setEditModalVisible(false)}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Editar Equipo</Text>
+            <TouchableOpacity onPress={() => setEditModalVisible(false)}>
+              <Ionicons name="close" size={24} color="#333333" />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView style={styles.modalContent}>
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Marca *</Text>
+              <TextInput
+                style={styles.formInput}
+                value={editFormData.Marca_Equipo?.toString()}
+                onChangeText={(text) => setEditFormData({ ...editFormData, Marca_Equipo: text })}
+                placeholder="Ingrese la marca"
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Año *</Text>
+              <TextInput
+                style={styles.formInput}
+                value={editFormData.Año_Equipo?.toString()}
+                onChangeText={(text) => setEditFormData({ ...editFormData, Año_Equipo: Number.parseInt(text) || 0 })}
+                placeholder="Ingrese el año"
+                keyboardType="numeric"
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Categoría *</Text>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={editFormData.Id_Categoria}
+                  onValueChange={(itemValue) => setEditFormData({ ...editFormData, Id_Categoria: itemValue })}
+                >
+                  <Picker.Item label="Seleccione una categoría" value="" />
+                  {categories.map((category) => (
+                    <Picker.Item
+                      key={category.Id_Categoria}
+                      label={category.Nombre_Categoria}
+                      value={category.Id_Categoria}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Modelo *</Text>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={editFormData.Id_Modelo}
+                  onValueChange={(itemValue) => setEditFormData({ ...editFormData, Id_Modelo: itemValue })}
+                >
+                  <Picker.Item label="Seleccione un modelo" value="" />
+                  {models.map((model) => (
+                    <Picker.Item key={model.Id_Modelo} label={`Modelo #${model.Id_Modelo}`} value={model.Id_Modelo} />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+          </ScrollView>
+
+          <View style={styles.modalFooter}>
+            <TouchableOpacity
+              style={[styles.modalButton, styles.modalCancelButton]}
+              onPress={() => setEditModalVisible(false)}
+              disabled={savingChanges}
+            >
+              <Text style={styles.modalButtonText}>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.modalButton, styles.modalSaveButton]}
+              onPress={handleSaveChanges}
+              disabled={savingChanges}
+            >
+              {savingChanges ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              ) : (
+                <Text style={styles.modalButtonText}>Guardar</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  )
+
+  // Definir los posibles estados para un equipo
+  const ESTADOS_EQUIPO = [
+    "Óptimo funcionamiento",
+    "En uso",
+    "Bajo rendimiento",
+    "Dañado",
+    "Fuera de servicio",
+    "En mantenimiento",
+    "Actualizado",
+  ]
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
           <Image source={{ uri: "https://via.placeholder.com/400x300" }} style={styles.equipmentImage} />
           <View style={styles.headerOverlay}>
-            <Text style={styles.equipmentName}>{equipment.name}</Text>
-            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(equipment.status) }]}>
-              <Text style={styles.statusText}>{equipment.status}</Text>
-            </View>
+            <Text style={styles.equipmentName}>{equipment?.Marca_Equipo || "Nuevo Equipo"}</Text>
+            {equipment?.Estado_Recibido && (
+              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(equipment.Estado_Recibido) }]}>
+                <Text style={styles.statusText}>{equipment.Estado_Recibido}</Text>
+              </View>
+            )}
           </View>
         </View>
 
@@ -264,15 +597,57 @@ const EquipmentDetailScreen: React.FC<RouteScreenProps<"EquipmentDetail">> = ({ 
       </ScrollView>
 
       <View style={styles.actionButtonsContainer}>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => setEditModalVisible(true)}>
           <Ionicons name="create-outline" size={20} color="#FFFFFF" />
           <Text style={styles.actionButtonText}>Editar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.actionButton, styles.actionButtonSecondary]}>
-          <Ionicons name="qr-code-outline" size={20} color="#FFFFFF" />
-          <Text style={styles.actionButtonText}>Ver QR</Text>
+        <TouchableOpacity style={[styles.actionButton, styles.actionButtonDanger]} onPress={handleDeleteEquipment}>
+          <Ionicons name="trash-outline" size={20} color="#FFFFFF" />
+          <Text style={styles.actionButtonText}>Eliminar</Text>
         </TouchableOpacity>
       </View>
+
+      {renderEditModal()}
+      {/* Modal para cambiar el estado del equipo */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={statusModalVisible}
+        onRequestClose={() => setStatusModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Cambiar Estado del Equipo</Text>
+            <Text style={styles.modalSubtitle}>{equipment?.Marca_Equipo || "Equipo"}</Text>
+
+            <View style={styles.statusOptions}>
+              {ESTADOS_EQUIPO.map((estado) => (
+                <TouchableOpacity
+                  key={estado}
+                  style={[styles.statusOption, newStatus === estado && styles.statusOptionSelected]}
+                  onPress={() => setNewStatus(estado)}
+                >
+                  <Text style={[styles.statusOptionText, newStatus === estado && styles.statusOptionTextSelected]}>
+                    {estado}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setStatusModalVisible(false)}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.modalButton, styles.saveButton]} onPress={handleChangeStatus}>
+                <Text style={styles.saveButtonText}>Guardar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }
@@ -417,17 +792,16 @@ const styles = StyleSheet.create({
     color: "#666666",
     marginLeft: 8,
   },
-  addButton: {
-    backgroundColor: "#007AFF",
-    borderRadius: 8,
-    padding: 12,
+  emptyStateContainer: {
     alignItems: "center",
-    marginTop: 16,
+    justifyContent: "center",
+    padding: 32,
   },
-  addButtonText: {
-    color: "#FFFFFF",
+  emptyStateText: {
+    marginTop: 16,
     fontSize: 16,
-    fontWeight: "bold",
+    color: "#666666",
+    textAlign: "center",
   },
   actionButtonsContainer: {
     flexDirection: "row",
@@ -446,8 +820,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 8,
   },
-  actionButtonSecondary: {
-    backgroundColor: "#4CAF50",
+  actionButtonDanger: {
+    backgroundColor: "#F44336",
     marginRight: 0,
     marginLeft: 8,
   },
@@ -457,7 +831,214 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 8,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#666666",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  errorText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#666666",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: "#007AFF",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    width: "90%",
+    maxHeight: "80%",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333333",
+  },
+  modalContent: {
+    padding: 16,
+    maxHeight: 400,
+  },
+  formGroup: {
+    marginBottom: 16,
+  },
+  formLabel: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#333333",
+    marginBottom: 8,
+  },
+  formInput: {
+    backgroundColor: "#F9F9F9",
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: "#333333",
+  },
+  pickerContainer: {
+    backgroundColor: "#F9F9F9",
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 8,
+  },
+  modalFooter: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#E0E0E0",
+  },
+  modalButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    marginLeft: 8,
+  },
+  modalCancelButton: {
+    backgroundColor: "#F5F5F5",
+  },
+  modalSaveButton: {
+    backgroundColor: "#007AFF",
+  },
+  modalButtonText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#FFFFFF",
+  },
+  statusContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  changeStatusButton: {
+    backgroundColor: "#007AFF",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  changeStatusButtonText: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    padding: 20,
+    width: "90%",
+    maxHeight: "80%",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333333",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  modalSubtitle: {
+    fontSize: 16,
+    color: "#666666",
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  statusOptions: {
+    marginBottom: 20,
+  },
+  statusOption: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    marginBottom: 8,
+    backgroundColor: "#F0F0F0",
+  },
+  statusOptionSelected: {
+    backgroundColor: "#007AFF",
+  },
+  statusOptionText: {
+    fontSize: 16,
+    color: "#333333",
+  },
+  statusOptionTextSelected: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  cancelButton: {
+    backgroundColor: "#F0F0F0",
+    marginRight: 8,
+  },
+  cancelButtonText: {
+    color: "#666666",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  saveButton: {
+    backgroundColor: "#007AFF",
+    marginLeft: 8,
+  },
+  saveButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 })
 
 export default EquipmentDetailScreen
-

@@ -34,7 +34,15 @@ const UsersScreen: React.FC<ScreenProps> = ({ navigation }) => {
   // Cargar datos al montar el componente
   useEffect(() => {
     fetchUsers()
-  }, [])
+
+    // Agregar un listener para recargar los datos cuando la pantalla vuelva a estar en foco
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchUsers()
+    })
+
+    // Limpiar el listener cuando el componente se desmonte
+    return unsubscribe
+  }, [navigation])
 
   // Función para cargar usuarios desde la API
   const fetchUsers = async () => {
@@ -54,6 +62,38 @@ const UsersScreen: React.FC<ScreenProps> = ({ navigation }) => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleDeleteUser = (id: string) => {
+    Alert.alert(
+      "Confirmar eliminación",
+      "¿Está seguro que desea eliminar este usuario? Esta acción no se puede deshacer.",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              setLoading(true)
+              const response = await usuariosService.delete(id)
+
+              if (response.success) {
+                Alert.alert("Éxito", "Usuario eliminado correctamente")
+                fetchUsers() // Recargar la lista
+              } else {
+                Alert.alert("Error", response.message || "No se pudo eliminar el usuario")
+              }
+            } catch (error) {
+              console.error("Error al eliminar:", error)
+              Alert.alert("Error", "Ocurrió un error al intentar eliminar el usuario")
+            } finally {
+              setLoading(false)
+            }
+          },
+        },
+      ],
+    )
   }
 
   const filteredUsers = users.filter((user) => {
@@ -96,7 +136,10 @@ const UsersScreen: React.FC<ScreenProps> = ({ navigation }) => {
   }
 
   const renderItem = ({ item }: { item: User }) => (
-    <TouchableOpacity style={styles.userCard}>
+    <TouchableOpacity
+      style={styles.userCard}
+      onPress={() => navigation.navigate("UserForm", { userId: item.Id_Usuario })}
+    >
       <View style={styles.userCardHeader}>
         <View style={styles.userImagePlaceholder}>
           <Text style={styles.userImagePlaceholderText}>
@@ -113,7 +156,23 @@ const UsersScreen: React.FC<ScreenProps> = ({ navigation }) => {
             <Text style={styles.userDepartment}>ID: {item.Id_Usuario}</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.userCardMenu}>
+        <TouchableOpacity
+          style={styles.userCardMenu}
+          onPress={() => {
+            Alert.alert("Opciones", "Seleccione una acción", [
+              {
+                text: "Editar",
+                onPress: () => navigation.navigate("UserForm", { userId: item.Id_Usuario }),
+              },
+              {
+                text: "Eliminar",
+                style: "destructive",
+                onPress: () => handleDeleteUser(item.Id_Usuario),
+              },
+              { text: "Cancelar", style: "cancel" },
+            ])
+          }}
+        >
           <Ionicons name="ellipsis-vertical" size={20} color="#666666" />
         </TouchableOpacity>
       </View>
@@ -131,7 +190,7 @@ const UsersScreen: React.FC<ScreenProps> = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.userCardAction}
-          onPress={() => Alert.alert("Editar usuario", `Editar usuario ${item.Nombre_Usuario_1}`)}
+          onPress={() => navigation.navigate("UserForm", { userId: item.Id_Usuario })}
         >
           <Ionicons name="create-outline" size={16} color="#007AFF" />
           <Text style={styles.userCardActionText}>Editar</Text>
@@ -220,10 +279,7 @@ const UsersScreen: React.FC<ScreenProps> = ({ navigation }) => {
         />
       )}
 
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => Alert.alert("Crear usuario", "Funcionalidad para crear un nuevo usuario")}
-      >
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("UserForm")}>
         <Ionicons name="add" size={24} color="#FFFFFF" />
       </TouchableOpacity>
     </SafeAreaView>
@@ -431,4 +487,3 @@ const styles = StyleSheet.create({
 })
 
 export default UsersScreen
-
