@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administración</title>
+    <link rel="stylesheet" href="css/inicio.css" />
+    <link rel="stylesheet" href="css/tablas.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>SGIT</h2>
+        <div class="theme-toggle">
+          <i class="fa-solid fa-sun sun"></i>
+          <label class="switch">
+            <input type="checkbox" id="theme-toggle" />
+            <span class="slider"></span>
+          </label>
+          <i class="fa-solid fa-moon moon"></i>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow inventory-glow"></div>
+            <a href="inicio.html" class="nav-link-front">
+              <i class="fas fa-home nav-icon inventory-icon"></i>
+              <span>Inicio</span>
+            </a>
+            <a href="inicio.html" class="nav-link-back">
+              <i class="fas fa-home nav-icon inventory-icon"></i>
+              <span>Inicio</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow inventory-glow"></div>
+            <a href="inventario.html" class="nav-link-front">
+              <i class="fas fa-box nav-icon inventory-icon"></i>
+              <span>Inventario</span>
+            </a>
+            <a href="inventario.html" class="nav-link-back">
+              <i class="fas fa-box nav-icon inventory-icon"></i>
+              <span>Inventario</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow maintenance-glow"></div>
+            <a href="mantenimiento.html" class="nav-link-front">
+              <i class="fas fa-tools nav-icon maintenance-icon"></i>
+              <span>Mantenimiento</span>
+            </a>
+            <a href="mantenimiento.html" class="nav-link-back">
+              <i class="fas fa-tools nav-icon maintenance-icon"></i>
+              <span>Mantenimiento</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow admin-glow"></div>
+            <a href="administracion.html" class="nav-link-front">
+              <i class="fas fa-cogs nav-icon admin-icon"></i>
+              <span>Administración</span>
+            </a>
+            <a href="administracion.html" class="nav-link-back">
+              <i class="fas fa-cogs nav-icon admin-icon"></i>
+              <span>Administración</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow lifecycle-glow"></div>
+            <a href="prestamo.html" class="nav-link-front">
+              <i class="fas fa-file-alt nav-icon lifecycle-icon"></i>
+              <span>Prestamo</span>
+            </a>
+            <a href="prestamo.html" class="nav-link-back">
+              <i class="fas fa-file-alt nav-icon lifecycle-icon"></i>
+              <span>Prestamo</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow profile-glow"></div>
+            <a href="perfil.html" class="nav-link-front">
+              <i class="fas fa-user nav-icon profile-icon"></i>
+              <span>Perfil</span>
+            </a>
+            <a href="perfil.html" class="nav-link-back">
+              <i class="fas fa-user nav-icon profile-icon"></i>
+              <span>Perfil</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <div class="nav-link-wrapper">
+            <div class="item-glow logout-glow"></div>
+            <a href="index.html" class="nav-link-front">
+              <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+            <a href="index.html" class="nav-link-back">
+              <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="top-bar">
+        <div class="top-bar-info">
+          <h1>Administración</h1>
+          <p>Panel de control administrativo</p>
+        </div>
+        <div class="user-profile">
+          <div class="user-avatar">A</div>
+          <div class="user-info">
+            <div class="user-name"></div>  <!-- Se llenará dinámicamente -->
+            <div class="user-role"></div>  <!-- Se llenará dinámicamente -->
+          </div>
+        </div>
+      </div>
+
+      <section class="admin-panel">
+        <div class="panel-header">
+          <h2>Panel de Administración</h2>
+          <div class="panel-actions">
+            <div class="search-container">
+              <input type="text" id="searchInput" placeholder="Buscar registros..." class="search-input">
+              <i class="fas fa-search search-icon"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div id="printable" class="table-responsive">
+          <table class="data-table">
+            <caption>Lista de Registros de Administración</caption>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Estado Entregado</th>
+                <th>Estado Recibido</th>
+                <th>Año</th>
+              </tr>
+            </thead>
+            <tbody id="equipos">
+              <tr>
+                <td colspan="5" class="loading-message">
+                  <div class="loading-spinner"></div>
+                  <span>Cargando datos...</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-footer">
+          <div class="pagination">
+            <button class="pagination-button" disabled><i class="fas fa-chevron-left"></i></button>
+            <span class="pagination-info">Página 1 de 1</span>
+            <button class="pagination-button" disabled><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <button class="action-button print-btn" onclick="imprimirTabla()">
+            <i class="fas fa-print"></i> Imprimir
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Toast para notificaciones -->
+    <div id="toast" class="toast">
+      <div class="toast-content">
+        <i id="toast-icon" class="fas fa-check-circle"></i>
+        <div class="toast-message" id="toast-message">Operación exitosa</div>
+      </div>
+      <div class="toast-progress"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        cargarDatosAdministracion();
+        
+        // Configurar búsqueda
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+          filtrarTabla();
+        });
+      });
+
+      function cargarDatosAdministracion() {
+        fetch("http://localhost/SGIT/api/administracion.php")
+          .then((response) => response.json())
+          .then((data) => {
+            let rows = "";
+            if (data.length === 0) {
+              rows = `<tr><td colspan="5" class="no-data">No hay registros disponibles</td></tr>`;
+            } else {
+              data.forEach((equipo) => {
+                rows += `<tr>
+                  <td>${equipo.Marca_Equipo}</td>
+                  <td>${equipo.Nombre_Categoria}</td>
+                  <td>${equipo.Estado_Entregado}</td>
+                  <td>${equipo.Estado_Recibido}</td>
+                  <td>${equipo.Año_Equipo}</td>
+                </tr>`;
+              });
+            }
+            document.getElementById("equipos").innerHTML = rows;
+          })
+          .catch((error) => {
+            document.getElementById("equipos").innerHTML =
+              '<tr><td colspan="5" class="error-message"><i class="fas fa-exclamation-circle"></i> Error al cargar los datos.</td></tr>';
+            console.error("Error cargando los datos:", error);
+            mostrarToast("Error al cargar los datos", "error");
+          });
+      }
+
+      function filtrarTabla() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toUpperCase();
+        const table = document.querySelector('.data-table');
+        const tr = table.getElementsByTagName('tr');
+        
+        for (let i = 1; i < tr.length; i++) { // Empezar desde 1 para saltar el encabezado
+          let visible = false;
+          const td = tr[i].getElementsByTagName('td');
+          
+          for (let j = 0; j < td.length; j++) {
+            const cell = td[j];
+            if (cell) {
+              const txtValue = cell.textContent || cell.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                visible = true;
+                break;
+              }
+            }
+          }
+          
+          tr[i].style.display = visible ? '' : 'none';
+        }
+      }
+
+      function mostrarToast(mensaje, tipo = "success") {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        const toastIcon = document.getElementById('toast-icon');
+        
+        toastMessage.textContent = mensaje;
+        
+        // Configurar icono y color según el tipo
+        if (tipo === "error") {
+          toast.classList.add('error');
+          toastIcon.className = 'fas fa-exclamation-circle';
+        } else {
+          toast.classList.remove('error');
+          toastIcon.className = 'fas fa-check-circle';
+        }
+        
+        // Mostrar el toast
+        toast.classList.add('show');
+        
+        // Ocultar después de 3 segundos
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
+
+      function imprimirTabla() {
+        let contenido = document.getElementById("printable").innerHTML;
+        let ventanaImpresion = window.open("", "", "width=800,height=600");
+        ventanaImpresion.document.write(`
+          <html>
+            <head>
+              <title>Imprimir Administración</title>
+              <link rel="stylesheet" href="css/tablas.css">
+              <style>
+                body { font-family: 'Poppins', sans-serif; padding: 20px; }
+                .data-table { width: 100%; border-collapse: collapse; }
+                .data-table th, .data-table td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+                .data-table th { background-color: #f2f2f2; }
+                @media print {
+                  body { -webkit-print-color-adjust: exact; }
+                  .data-table th { background-color: #f2f2f2 !important; }
+                }
+              </style>
+            </head>
+            <body>
+              <h1>Registros de Administración</h1>
+              <p>Fecha de impresión: ${new Date().toLocaleString()}</p>
+              ${contenido}
+            </body>
+          </html>
+        `);
+        ventanaImpresion.document.close();
+        ventanaImpresion.focus();
+        setTimeout(() => {
+          ventanaImpresion.print();
+          ventanaImpresion.close();
+        }, 500);
+      }
+
+      // Funcionalidad para el cambio de tema
+      const themeToggle = document.getElementById("theme-toggle");
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+        themeToggle.checked = true;
+      }
+
+      themeToggle.addEventListener("change", function () {
+        document.body.classList.toggle("dark", this.checked);
+        localStorage.setItem("theme", this.checked ? "dark" : "light");
+      });
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        try {
+          const response = await fetch("obtener_usuario.php");
+          const data = await response.json();
+
+          if (data.error) {
+            console.error("Error:", data.error);
+            return;
+          }
+
+          // Insertar nombre y rol en la interfaz
+          document.querySelector(".user-name").textContent = data.nombre;
+          document.querySelector(".user-role").textContent = `Rol: ${data.nombre_rol} (ID: ${data.id_rol})`;
+          
+          // Inicial de avatar
+          document.querySelector(".user-avatar").textContent = data.nombre.charAt(0).toUpperCase();
+        } catch (error) {
+          console.error("Error al obtener datos del usuario:", error);
+        }
+      });
+    </script>
+  </body>
+</html>
+

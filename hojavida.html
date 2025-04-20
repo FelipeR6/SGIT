@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inventario</title>
+  <title>Hoja de Vida de Equipos</title>
   <link rel="stylesheet" href="css/inicio.css" />
   <link rel="stylesheet" href="css/tablas.css" />
   <link rel="stylesheet" href="css/modal.css" />
@@ -134,8 +134,8 @@
   <main class="content">
     <div class="top-bar">
       <div class="top-bar-info">
-        <h1>Inventario</h1>
-        <p>Gestión de equipos tecnológicos</p>
+        <h1>Hoja de Vida</h1>
+        <p>Historial y documentación de equipos</p>
       </div>
       <div class="user-profile">
         <div class="user-avatar">A</div>
@@ -146,34 +146,37 @@
       </div>
     </div>
 
-    <section class="inventory-panel">
+    <section class="hojavida-panel">
       <div class="panel-header">
-        <h2>Equipos Registrados</h2>
+        <h2>Hoja de Vida de Equipos</h2>
         <div class="panel-actions">
           <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Buscar equipo..." class="search-input">
+            <input type="text" id="searchInput" placeholder="Buscar hoja de vida..." class="search-input">
             <i class="fas fa-search search-icon"></i>
           </div>
           <button class="action-button add-button" onclick="openAddModal()">
-            <i class="fas fa-plus"></i> Agregar Equipo
+            <i class="fas fa-plus"></i> Agregar Hoja de Vida
           </button>
         </div>
       </div>
       
       <div id="printable" class="table-responsive">
         <table class="data-table">
-          <caption>Lista de Equipos</caption>
+          <caption>
+            Lista de Registros de Hoja de Vida
+          </caption>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Marca</th>
-              <th>Año</th>
-              <th>Categoría</th>
-              <th>Modelo</th>
+              <th>ID Hoja Vida</th>
+              <th>Marca Equipo</th>
+              <th>Estado Entregado</th>
+              <th>Estado Recibido</th>
+              <th>Usuario</th>
+              <th>Fecha de Ingreso</th>
               <th>Acciones</th>
             </tr>
           </thead>
-          <tbody id="inventory-entries">
+          <tbody id="hojavida-entries">
             <tr>
               <td colspan="7" class="loading-message">
                 <div class="loading-spinner"></div>
@@ -197,43 +200,34 @@
     </section>
   </main>
 
-  <!-- Modal para Agregar Equipo -->
+  <!-- Modal para Agregar Hoja de Vida -->
   <div id="addModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3><i class="fas fa-plus-circle"></i> Agregar Nuevo Equipo</h3>
+        <h3><i class="fas fa-plus-circle"></i> Agregar Nueva Hoja de Vida</h3>
         <span class="close-modal" onclick="closeModal('addModal')">&times;</span>
       </div>
       <div class="modal-body">
-        <form id="addEquipoForm">
+        <form id="addHojaVidaForm">
           <div class="form-group">
-            <label for="equipoAdd"><i class="fas fa-laptop"></i> Marca:</label>
-            <select id="equipoAdd" required>
-              <option value="">Seleccione una marca</option>
-              <!-- Se llenará dinámicamente según la categoría seleccionada -->
-            </select>
+            <label for="marcaAdd"><i class="fas fa-tag"></i> Marca del Equipo:</label>
+            <input type="text" id="marcaAdd" required placeholder="Ingrese la marca del equipo">
           </div>
           <div class="form-group">
-            <label for="añoAdd"><i class="fas fa-calendar-alt"></i> Año:</label>
-            <input type="text" id="añoAdd" required placeholder="Año del equipo">
+            <label for="estadoEntregadoAdd"><i class="fas fa-check-circle"></i> Estado Entregado:</label>
+            <input type="text" id="estadoEntregadoAdd" required placeholder="Ingrese el estado entregado">
           </div>
           <div class="form-group">
-            <label for="categoriaAdd"><i class="fas fa-list"></i> Categoría:</label>
-            <select id="categoriaAdd" required onchange="cargarModelosPorCategoria('categoriaAdd', 'modeloAdd')">
-              <option value="">Seleccione una categoría</option>
-              <!-- Se llenará dinámicamente -->
-            </select>
+            <label for="estadoRecibidoAdd"><i class="fas fa-clipboard-check"></i> Estado Recibido:</label>
+            <input type="text" id="estadoRecibidoAdd" required placeholder="Ingrese el estado recibido">
           </div>
           <div class="form-group">
-            <label for="modeloAdd"><i class="fas fa-laptop"></i> Modelo:</label>
-            <select id="modeloAdd" required>
-              <option value="">Seleccione un modelo</option>
-              <!-- Se llenará dinámicamente según la categoría seleccionada -->
-            </select>
+            <label for="usuarioAdd"><i class="fas fa-user"></i> Usuario:</label>
+            <input type="text" id="usuarioAdd" required placeholder="Ingrese el nombre del usuario">
           </div>
           <div class="form-group">
-            <label for="observacionesAdd"><i class="fas fa-clipboard"></i> Observaciones:</label>
-            <textarea id="observacionesAdd" rows="4" placeholder="Ingrese observaciones del equipo"></textarea>
+            <label for="fechaIngresoAdd"><i class="fas fa-calendar-alt"></i> Fecha de Ingreso:</label>
+            <input type="date" id="fechaIngresoAdd" required>
           </div>
           <div class="form-actions">
             <button type="button" class="cancel-button" onclick="closeModal('addModal')">Cancelar</button>
@@ -244,44 +238,35 @@
     </div>
   </div>
 
-  <!-- Modal para Editar Equipo -->
+  <!-- Modal para Editar Hoja de Vida -->
   <div id="editModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3><i class="fas fa-edit"></i> Editar Equipo</h3>
+        <h3><i class="fas fa-edit"></i> Editar Hoja de Vida</h3>
         <span class="close-modal" onclick="closeModal('editModal')">&times;</span>
       </div>
       <div class="modal-body">
-        <form id="editEquipoForm">
-          <input type="hidden" id="equipoId">
+        <form id="editHojaVidaForm">
+          <input type="hidden" id="hojaVidaId">
           <div class="form-group">
-            <label for="equipoEdit"><i class="fas fa-laptop"></i> Marca:</label>
-            <select id="equipoEdit" required>
-              <option value="">Seleccione un marca</option>
-              <!-- Se llenará dinámicamente según la categoría seleccionada -->
-            </select>
+            <label for="marcaEdit"><i class="fas fa-tag"></i> Marca del Equipo:</label>
+            <input type="text" id="marcaEdit" required placeholder="Ingrese la marca del equipo">
           </div>
           <div class="form-group">
-            <label for="añoEdit"><i class="fas fa-calendar-alt"></i> Año:</label>
-            <input type="text" id="añoEdit" required placeholder="Año del equipo">
+            <label for="estadoEntregadoEdit"><i class="fas fa-check-circle"></i> Estado Entregado:</label>
+            <input type="text" id="estadoEntregadoEdit" required placeholder="Ingrese el estado entregado">
           </div>
           <div class="form-group">
-            <label for="categoriaEdit"><i class="fas fa-list"></i> Categoría:</label>
-            <select id="categoriaEdit" required onchange="cargarModelosPorCategoria('categoriaEdit', 'modeloEdit')">
-              <option value="">Seleccione una categoría</option>
-              <!-- Se llenará dinámicamente -->
-            </select>
+            <label for="estadoRecibidoEdit"><i class="fas fa-clipboard-check"></i> Estado Recibido:</label>
+            <input type="text" id="estadoRecibidoEdit" required placeholder="Ingrese el estado recibido">
           </div>
           <div class="form-group">
-            <label for="modeloEdit"><i class="fas fa-laptop"></i> Modelo:</label>
-            <select id="modeloEdit" required>
-              <option value="">Seleccione un modelo</option>
-              <!-- Se llenará dinámicamente según la categoría seleccionada -->
-            </select>
+            <label for="usuarioEdit"><i class="fas fa-user"></i> Usuario:</label>
+            <input type="text" id="usuarioEdit" required placeholder="Ingrese el nombre del usuario">
           </div>
           <div class="form-group">
-            <label for="observacionesEdit"><i class="fas fa-clipboard"></i> Observaciones:</label>
-            <textarea id="observacionesEdit" rows="4" placeholder="Ingrese observaciones del equipo"></textarea>
+            <label for="fechaIngresoEdit"><i class="fas fa-calendar-alt"></i> Fecha de Ingreso:</label>
+            <input type="date" id="fechaIngresoEdit" required>
           </div>
           <div class="form-actions">
             <button type="button" class="cancel-button" onclick="closeModal('editModal')">Cancelar</button>
@@ -300,8 +285,8 @@
         <span class="close-modal" onclick="closeModal('deleteModal')">&times;</span>
       </div>
       <div class="modal-body">
-        <p>¿Está seguro que desea eliminar este equipo? Esta acción no se puede deshacer.</p>
-        <input type="hidden" id="deleteEquipoId">
+        <p>¿Está seguro que desea eliminar esta hoja de vida? Esta acción no se puede deshacer.</p>
+        <input type="hidden" id="deleteHojaVidaId">
         <div class="form-actions">
           <button type="button" class="cancel-button" onclick="closeModal('deleteModal')">Cancelar</button>
           <button type="button" class="delete-button" onclick="confirmarEliminar()">Eliminar</button>
@@ -320,23 +305,20 @@
   </div>
 
   <script>
-    const API_URL = "http://localhost/SGIT/api/inventario.php";
-    const CATEGORIAS_API_URL = "http://localhost/SGIT/api/categoria.php";
-    const MODELOS_API_URL = "http://localhost/SGIT/api/modelo.php";
+    const API_URL = "http://localhost/SGIT/api/hojavida.php";
 
     document.addEventListener("DOMContentLoaded", function() {
-      cargarInventario();
-      cargarCategorias();
+      cargarHojasVida();
       
       // Configurar los formularios
-      document.getElementById('addEquipoForm').addEventListener('submit', function(e) {
+      document.getElementById('addHojaVidaForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        agregarEquipoForm();
+        agregarHojaVidaForm();
       });
       
-      document.getElementById('editEquipoForm').addEventListener('submit', function(e) {
+      document.getElementById('editHojaVidaForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        actualizarEquipoForm();
+        actualizarHojaVidaForm();
       });
       
       // Configurar búsqueda
@@ -345,122 +327,41 @@
       });
     });
 
-    function cargarEquipos() {
-      fetch(API_URL)
-        .then((response) => response.json())
-        .then((data) => {
-          let options = '<option value="">Seleccione un equipo</option>';
-          data.forEach((equipo) => {
-            options += `<option value="${equipo.Id_Equipos}">${equipo.Marca_Equipo}</option>`;
-          });
-          document.getElementById('equipoAdd').innerHTML = options;
-          document.getElementById('equipoEdit').innerHTML = options;
-        })
-        .catch((error) => {
-          console.error("Error cargando equipos:", error);
-          mostrarToast("Error al cargar los equipos", "error");
-        });
-    }
-
-    function cargarInventario() {
+    function cargarHojasVida() {
       fetch(API_URL)
         .then((response) => response.json())
         .then((data) => {
           let rows = "";
           if (data.length === 0) {
-            rows = `<tr><td colspan="7" class="no-data">No hay equipos registrados</td></tr>`;
+            rows = `<tr><td colspan="7" class="no-data">No hay registros de hojas de vida disponibles</td></tr>`;
           } else {
-            data.forEach((equipo) => {
-              const estado = getEstadoBadge(equipo.Estado);
-              
+            data.forEach((entry) => {
               rows += `<tr>
-                <td>${equipo.Id_Equipos}</td>
-                <td>${equipo.Marca_Equipo}</td>
-                <td>${equipo.Año_Equipo}</td>
-                <td>${equipo.Nombre_Categoria}</td>
-                <td>${equipo.Caracteristicas_Modelo}</td>
+                <td>${entry.Id_Hoja_vida_equipo}</td>
+                <td>${entry.Marca_Equipo}</td>
+                <td>${entry.Estado_Entregado}</td>
+                <td>${entry.Estado_Recibido}</td>
+                <td>${entry.Nombre_Usuario_1} ${entry.Apellidos_Usuario_1}</td>
+                <td>${entry.Fecha_ingreso}</td>
                 <td class="actions-cell">
-                  <button class="action-icon edit-icon" onclick="openEditModal(${equipo.Id_Equipos}, '${equipo.Marca_Equipo}', '${equipo.Año_Equipo}', ${equipo.Id_Categoria}, ${equipo.Id_Modelo}, '${equipo.Observaciones ? equipo.Observaciones.replace(/'/g, "\\'") : ''}')">
+                  <button class="action-icon edit-icon" onclick="openEditModal(${entry.Id_Hoja_vida_equipo}, '${entry.Marca_Equipo}', '${entry.Estado_Entregado}', '${entry.Estado_Recibido}', '${entry.Nombre_Usuario_1} ${entry.Apellidos_Usuario_1}', '${entry.Fecha_ingreso}')">
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button class="action-icon delete-icon" onclick="openDeleteModal(${equipo.Id_Equipos})">
+                  <button class="action-icon delete-icon" onclick="openDeleteModal(${entry.Id_Hoja_vida_equipo})">
                     <i class="fas fa-trash-alt"></i>
                   </button>
                 </td>
               </tr>`;
             });
           }
-          document.getElementById("inventory-entries").innerHTML = rows;
+          document.getElementById("hojavida-entries").innerHTML = rows;
         })
         .catch((error) => {
-          document.getElementById("inventory-entries").innerHTML =
+          document.getElementById("hojavida-entries").innerHTML =
             '<tr><td colspan="7" class="error-message"><i class="fas fa-exclamation-circle"></i> Error al cargar los datos.</td></tr>';
-          console.error("Error cargando inventario:", error);
+          console.error("Error cargando las hojas de vida:", error);
           mostrarToast("Error al cargar los datos", "error");
         });
-    }
-
-    function cargarCategorias() {
-      fetch(CATEGORIAS_API_URL)
-        .then((response) => response.json())
-        .then((data) => {
-          let options = '<option value="">Seleccione una categoría</option>';
-          data.forEach((categoria) => {
-            options += `<option value="${categoria.Id_Categoria}">${categoria.Nombre_Categoria}</option>`;
-          });
-          document.getElementById('categoriaAdd').innerHTML = options;
-          document.getElementById('categoriaEdit').innerHTML = options;
-        })
-        .catch((error) => {
-          console.error("Error cargando categorías:", error);
-          mostrarToast("Error al cargar las categorías", "error");
-        });
-    }
-
-    function cargarModelosPorCategoria(categoriaSelectId, modeloSelectId) {
-      const categoriaId = document.getElementById(categoriaSelectId).value;
-      
-      if (!categoriaId) {
-        document.getElementById(modeloSelectId).innerHTML = '<option value="">Seleccione un modelo</option>';
-        return;
-      }
-      
-      fetch(`${MODELOS_API_URL}?categoria=${categoriaId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          let options = '<option value="">Seleccione un modelo</option>';
-          data.forEach((modelo) => {
-            options += `<option value="${modelo.Id_Modelo}">${modelo.Caracteristicas_Modelo}</option>`;
-          });
-          document.getElementById(modeloSelectId).innerHTML = options;
-        })
-        .catch((error) => {
-          console.error("Error cargando modelos:", error);
-          mostrarToast("Error al cargar los modelos", "error");
-        });
-    }
-
-    function getEstadoBadge(estado) {
-      let badgeClass = '';
-      
-      switch(estado) {
-        case 'Activo':
-          badgeClass = 'active';
-          break;
-        case 'Inactivo':
-          badgeClass = 'inactive';
-          break;
-        case 'En Mantenimiento':
-          badgeClass = 'maintenance';
-          break;
-        case 'Dado de Baja':
-          badgeClass = 'retired';
-          break;
-        default:
-          badgeClass = 'default';
-      }
-      
-      return `<span class="status-badge ${badgeClass}">${estado}</span>`;
     }
 
     function filtrarTabla() {
@@ -490,31 +391,26 @@
 
     // Funciones para modales
     function openAddModal() {
-      document.getElementById('addEquipoForm').reset();
-      document.getElementById('estadoAdd').value = "Activo";
+      document.getElementById('addHojaVidaForm').reset();
+      // Establecer la fecha de hoy como predeterminada
+      document.getElementById('fechaIngresoAdd').valueAsDate = new Date();
       document.getElementById('addModal').style.display = 'flex';
+      document.getElementById('marcaAdd').focus();
     }
     
-    function openEditModal(id, marca, año, idCategoria, idModelo, estado, observaciones) {
-      document.getElementById('equipoId').value = id;
-      document.getElementById('equipoEdit').value = marca;
-      document.getElementById('añoEdit').value = año;
-      document.getElementById('categoriaEdit').value = idCategoria;
-      
-      // Cargar los modelos de la categoría seleccionada
-      cargarModelosPorCategoria('categoriaEdit', 'modeloEdit');
-      
-      // Establecer un timeout para asegurarse de que los modelos se hayan cargado
-      setTimeout(() => {
-        document.getElementById('modeloEdit').value = idModelo;
-      }, 500);
-      
-      document.getElementById('observacionesEdit').value = observaciones;
+    function openEditModal(id, marca, estadoEntregado, estadoRecibido, usuario, fechaIngreso) {
+      document.getElementById('hojaVidaId').value = id;
+      document.getElementById('marcaEdit').value = marca;
+      document.getElementById('estadoEntregadoEdit').value = estadoEntregado;
+      document.getElementById('estadoRecibidoEdit').value = estadoRecibido;
+      document.getElementById('usuarioEdit').value = usuario;
+      document.getElementById('fechaIngresoEdit').value = fechaIngreso;
       document.getElementById('editModal').style.display = 'flex';
+      document.getElementById('marcaEdit').focus();
     }
     
     function openDeleteModal(id) {
-      document.getElementById('deleteEquipoId').value = id;
+      document.getElementById('deleteHojaVidaId').value = id;
       document.getElementById('deleteModal').style.display = 'flex';
     }
     
@@ -532,87 +428,86 @@
       }
     }
 
-    function agregarEquipoForm() {
-      const marca = document.getElementById('equipoAdd').value;
-      const año = document.getElementById('añoAdd').value;
-      const idCategoria = document.getElementById('categoriaAdd').value;
-      const idModelo = document.getElementById('modeloAdd').value;
-      const observaciones = document.getElementById('observacionesAdd').value;
+    function agregarHojaVidaForm() {
+      const marca = document.getElementById('marcaAdd').value;
+      const estadoEntregado = document.getElementById('estadoEntregadoAdd').value;
+      const estadoRecibido = document.getElementById('estadoRecibidoAdd').value;
+      const usuario = document.getElementById('usuarioAdd').value;
+      const fechaIngreso = document.getElementById('fechaIngresoAdd').value;
 
       fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           Marca_Equipo: marca,
-          Año_Equipo: año,
-          Id_Categoria: idCategoria,
-          Id_Modelo: idModelo,
-          Observaciones: observaciones
+          Estado_Entregado: estadoEntregado,
+          Estado_Recibido: estadoRecibido,
+          Usuario: usuario,
+          Fecha_ingreso: fechaIngreso
         }),
       })
       .then(response => response.json())
       .then(data => {
         closeModal('addModal');
-        document.getElementById('addEquipoForm').reset();
-        mostrarToast(data.message || "Equipo agregado con éxito", data.error ? "error" : "success");
-        cargarInventario();
+        document.getElementById('addHojaVidaForm').reset();
+        mostrarToast(data.message || "Hoja de vida agregada con éxito", data.error ? "error" : "success");
+        cargarHojasVida();
       })
       .catch(error => {
-        console.error("Error agregando equipo:", error);
-        mostrarToast("Error al agregar equipo", "error");
+        console.error("Error agregando hoja de vida:", error);
+        mostrarToast("Error al agregar hoja de vida", "error");
       });
     }
 
-    function actualizarEquipoForm() {
-      const id = document.getElementById('equipoId').value;
-      const marca = document.getElementById('equipoEdit').value;
-      const año = document.getElementById('añoEdit').value;
-      const idCategoria = document.getElementById('categoriaEdit').value;
-      const idModelo = document.getElementById('modeloEdit').value;
-      const observaciones = document.getElementById('observacionesEdit').value;
+    function actualizarHojaVidaForm() {
+      const id = document.getElementById('hojaVidaId').value;
+      const marca = document.getElementById('marcaEdit').value;
+      const estadoEntregado = document.getElementById('estadoEntregadoEdit').value;
+      const estadoRecibido = document.getElementById('estadoRecibidoEdit').value;
+      const usuario = document.getElementById('usuarioEdit').value;
+      const fechaIngreso = document.getElementById('fechaIngresoEdit').value;
 
       fetch(API_URL, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          Id_Equipos: id,
+          Id_Hoja_vida_equipo: id,
           Marca_Equipo: marca,
-          Año_Equipo: año,
-          Id_Categoria: idCategoria,
-          Id_Modelo: idModelo,
-          Estado: estado,
-          Observaciones: observaciones
+          Estado_Entregado: estadoEntregado,
+          Estado_Recibido: estadoRecibido,
+          Usuario: usuario,
+          Fecha_ingreso: fechaIngreso
         }),
       })
       .then(response => response.json())
       .then(data => {
         closeModal('editModal');
-        mostrarToast(data.message || "Equipo actualizado con éxito", data.error ? "error" : "success");
-        cargarInventario();
+        mostrarToast(data.message || "Hoja de vida actualizada con éxito", data.error ? "error" : "success");
+        cargarHojasVida();
       })
       .catch(error => {
-        console.error("Error actualizando equipo:", error);
-        mostrarToast("Error al actualizar equipo", "error");
+        console.error("Error editando hoja de vida:", error);
+        mostrarToast("Error al actualizar hoja de vida", "error");
       });
     }
 
     function confirmarEliminar() {
-      const id = document.getElementById('deleteEquipoId').value;
+      const id = document.getElementById('deleteHojaVidaId').value;
       
       fetch(API_URL, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ Id_Equipos: id }),
+        body: JSON.stringify({ Id_Hoja_vida_equipo: id }),
       })
       .then(response => response.json())
       .then(data => {
         closeModal('deleteModal');
-        mostrarToast(data.message || "Equipo eliminado con éxito", data.error ? "error" : "success");
-        cargarInventario();
+        mostrarToast(data.message || "Hoja de vida eliminada con éxito", data.error ? "error" : "success");
+        cargarHojasVida();
       })
       .catch(error => {
-        console.error("Error eliminando equipo:", error);
-        mostrarToast("Error al eliminar equipo", "error");
+        console.error("Error eliminando hoja de vida:", error);
+        mostrarToast("Error al eliminar hoja de vida", "error");
       });
     }
 
@@ -647,7 +542,7 @@
       ventanaImpresion.document.write(`
         <html>
           <head>
-            <title>Imprimir Inventario</title>
+            <title>Imprimir Hojas de Vida</title>
             <link rel="stylesheet" href="css/tablas.css">
             <style>
               body { font-family: 'Poppins', sans-serif; padding: 20px; }
@@ -655,28 +550,14 @@
               .data-table th, .data-table td { padding: 10px; border: 1px solid #ddd; text-align: left; }
               .data-table th { background-color: #f2f2f2; }
               .actions-cell { display: none; }
-              .status-badge {
-                padding: 5px 10px;
-                border-radius: 20px;
-                font-size: 0.8em;
-                font-weight: 500;
-              }
-              .active { background-color: #d4f7d4; color: #00a854; }
-              .inactive { background-color: #fff1f0; color: #f5222d; }
-              .maintenance { background-color: #fff7e6; color: #fa8c16; }
-              .retired { background-color: #f5f5f5; color: #8c8c8c; }
               @media print {
                 body { -webkit-print-color-adjust: exact; }
                 .data-table th { background-color: #f2f2f2 !important; }
-                .active { background-color: #d4f7d4 !important; color: #00a854 !important; }
-                .inactive { background-color: #fff1f0 !important; color: #f5222d !important; }
-                .maintenance { background-color: #fff7e6 !important; color: #fa8c16 !important; }
-                .retired { background-color: #f5f5f5 !important; color: #8c8c8c !important; }
               }
             </style>
           </head>
           <body>
-            <h1>Inventario de Equipos</h1>
+            <h1>Hojas de Vida de Equipos</h1>
             <p>Fecha de impresión: ${new Date().toLocaleString()}</p>
             ${contenido}
           </body>
@@ -726,3 +607,4 @@
   </script>
 </body>
 </html>
+

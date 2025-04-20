@@ -1,105 +1,655 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/manteni.css" rel="stylesheet">
-    <title>Registro Mantenimiento</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mantenimiento</title>
+  <link rel="stylesheet" href="css/inicio.css" />
+  <link rel="stylesheet" href="css/tablas.css" />
+  <link rel="stylesheet" href="css/modal.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
 </head>
-<body class="p-3 bd-example border-0">
-    <nav class="navbar bg-body-tertiary fixed-top">
-        <div class="container-fluid">
-            <img src="imagenes/logo.png" width="5%" alt="Logo">
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Bienvenido</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="inicio.html">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="mantenimiento.html">Mantenimiento</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="equipo.html">Equipo</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="hojaV.html">Hoja de Vida</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="inventario.html">Inventario</a>
-                          </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Únete</a>
-                            <ul class="dropdown-menu dropdown-menu-dark">
-                                <li><a class="dropdown-item" href="login.html">Inicio Sesión</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="registro.html">¿Eres Nuevo?</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <br>
-    <div class="inventory-container mt-5">
-        <h2>Registro de Mantenimiento de Inventario Tecnológico</h2>
-        <form>
-            <div class="form-group">
-                <label for="item-name">Nombre del Artículo</label>
-                <input type="text" class="form-control" id="item-name" placeholder="Ingrese el nombre del artículo">
-            </div>
-            <div class="form-group">
-                <label for="category">Categoría</label>
-                <select class="form-control" id="category">
-                    <option>Computadora</option>
-                    <option>Monitor</option>
-                    <option>Teclado</option>
-                    <option>Mouse</option>
-                    <option>Impresora</option>
-                    <option>Otro</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="serial-number">Número de Serie</label>
-                <input type="text" class="form-control" id="serial-number" placeholder="Ingrese el número de serie">
-            </div>
-            <div class="form-group">
-                <label for="purchase-date">Fecha de Compra</label>
-                <input type="date" class="form-control" id="purchase-date">
-            </div>
-            <div class="form-group">
-                <label for="warranty-date">Fecha de Vencimiento de Garantía</label>
-                <input type="date" class="form-control" id="warranty-date">
-            </div>
-            <div class="form-group">
-                <label for="maintenance-date">Fecha de Último Mantenimiento</label>
-                <input type="date" class="form-control" id="maintenance-date">
-            </div>
-            <div class="form-group">
-                <label for="condition">Condición</label>
-                <select class="form-control" id="condition">
-                    <option>Nuevo</option>
-                    <option>Usado</option>
-                    <option>Necesita Reparación</option>
-                    <option>Obsoleto</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-register">Registrar Artículo</button>
-            <button type="reset" class="btn btn-secondary">Limpiar Campos</button>
-        </form>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>SGIT</h2>
+      <div class="theme-toggle">
+        <i class="fa-solid fa-sun sun"></i>
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle" />
+          <span class="slider"></span>
+        </label>
+        <i class="fa-solid fa-moon moon"></i>
+      </div>
     </div>
 
+    <nav class="sidebar-nav">
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow inventory-glow"></div>
+          <a href="inicio.html" class="nav-link-front">
+            <i class="fas fa-home nav-icon inventory-icon"></i>
+            <span>Inicio</span>
+          </a>
+          <a href="inicio.html" class="nav-link-back">
+            <i class="fas fa-home nav-icon inventory-icon"></i>
+            <span>Inicio</span>
+          </a>
+        </div>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow inventory-glow"></div>
+          <a href="inventario.html" class="nav-link-front">
+            <i class="fas fa-box nav-icon inventory-icon"></i>
+            <span>Inventario</span>
+          </a>
+          <a href="inventario.html" class="nav-link-back">
+            <i class="fas fa-box nav-icon inventory-icon"></i>
+            <span>Inventario</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow maintenance-glow"></div>
+          <a href="mantenimiento.html" class="nav-link-front">
+            <i class="fas fa-tools nav-icon maintenance-icon"></i>
+            <span>Mantenimiento</span>
+          </a>
+          <a href="mantenimiento.html" class="nav-link-back">
+            <i class="fas fa-tools nav-icon maintenance-icon"></i>
+            <span>Mantenimiento</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow admin-glow"></div>
+          <a href="administracion.html" class="nav-link-front">
+            <i class="fas fa-cogs nav-icon admin-icon"></i>
+            <span>Administración</span>
+          </a>
+          <a href="administracion.html" class="nav-link-back">
+            <i class="fas fa-cogs nav-icon admin-icon"></i>
+            <span>Administración</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow lifecycle-glow"></div>
+          <a href="prestamo.html" class="nav-link-front">
+            <i class="fas fa-file-alt nav-icon lifecycle-icon"></i>
+            <span>Prestamo</span>
+          </a>
+          <a href="prestamo.html" class="nav-link-back">
+            <i class="fas fa-file-alt nav-icon lifecycle-icon"></i>
+            <span>Prestamo</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow profile-glow"></div>
+          <a href="perfil.html" class="nav-link-front">
+            <i class="fas fa-user nav-icon profile-icon"></i>
+            <span>Perfil</span>
+          </a>
+          <a href="perfil.html" class="nav-link-back">
+            <i class="fas fa-user nav-icon profile-icon"></i>
+            <span>Perfil</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-link-wrapper">
+          <div class="item-glow logout-glow"></div>
+          <a href="index.html" class="nav-link-front">
+            <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+            <span>Cerrar Sesión</span>
+          </a>
+          <a href="index.html" class="nav-link-back">
+            <i class="fas fa-sign-out-alt nav-icon logout-icon"></i>
+            <span>Cerrar Sesión</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="top-bar">
+      <div class="top-bar-info">
+        <h1>Mantenimiento</h1>
+        <p>Gestión de mantenimientos de equipos</p>
+      </div>
+      <div class="user-profile">
+        <div class="user-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name"></div>  <!-- Se llenará dinámicamente -->
+          <div class="user-role"></div>  <!-- Se llenará dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <section class="maintenance-panel">
+      <div class="panel-header">
+        <h2>Registro de Mantenimientos</h2>
+        <div class="panel-actions">
+          <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar mantenimiento..." class="search-input">
+            <i class="fas fa-search search-icon"></i>
+          </div>
+          <button class="action-button add-button" onclick="openAddModal()">
+            <i class="fas fa-plus"></i> Registrar Mantenimiento
+          </button>
+        </div>
+      </div>
+      
+      <div id="printable" class="table-responsive">
+        <table class="data-table">
+          <caption>Lista de Mantenimientos</caption>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Equipo</th>
+              <th>Fecha Inicio</th>
+              <th>Fecha Fin</th>
+              <th>Observaciones</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="maintenance-entries">
+            <tr>
+              <td colspan="7" class="loading-message">
+                <div class="loading-spinner"></div>
+                <span>Cargando datos...</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-footer">
+        <div class="pagination">
+          <button class="pagination-button" disabled><i class="fas fa-chevron-left"></i></button>
+          <span class="pagination-info">Página 1 de 1</span>
+          <button class="pagination-button" disabled><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <button class="action-button print-btn" onclick="imprimirTabla()">
+          <i class="fas fa-print"></i> Imprimir
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal para Agregar Mantenimiento -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-plus-circle"></i> Registrar Nuevo Mantenimiento</h3>
+        <span class="close-modal" onclick="closeModal('addModal')">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="addMantenimientoForm">
+          <div class="form-group">
+            <label for="equipoAdd"><i class="fas fa-box"></i> Equipo:</label>
+            <select id="equipoAdd" required>
+              <option value="">Seleccione un equipo</option>
+              <!-- Se llenará dinámicamente -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fechaInicioAdd"><i class="fas fa-calendar-alt"></i> Fecha de Inicio:</label>
+            <input type="date" id="fechaInicioAdd" required>
+          </div>
+          <div class="form-group">
+            <label for="fechaFinAdd"><i class="fas fa-calendar-check"></i> Fecha de Finalización:</label>
+            <input type="date" id="fechaFinAdd">
+          </div>
+          <div class="form-group">
+            <label for="observacionesAdd"><i class="fas fa-clipboard"></i> Observaciones:</label>
+            <textarea id="observacionesAdd" rows="4" placeholder="Ingrese observaciones del mantenimiento"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="cancel-button" onclick="closeModal('addModal')">Cancelar</button>
+            <button type="submit" class="submit-button">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Editar Mantenimiento -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-edit"></i> Editar Mantenimiento</h3>
+        <span class="close-modal" onclick="closeModal('editModal')">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="editMantenimientoForm">
+          <input type="hidden" id="mantenimientoId">
+          <div class="form-group">
+            <label for="equipoEdit"><i class="fas fa-box"></i> Equipo:</label>
+            <select id="equipoEdit" required>
+              <option value="">Seleccione un equipo</option>
+              <!-- Se llenará dinámicamente -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fechaInicioEdit"><i class="fas fa-calendar-alt"></i> Fecha de Inicio:</label>
+            <input type="date" id="fechaInicioEdit" required>
+          </div>
+          <div class="form-group">
+            <label for="fechaFinEdit"><i class="fas fa-calendar-check"></i> Fecha de Finalización:</label>
+            <input type="date" id="fechaFinEdit">
+          </div>
+          <div class="form-group">
+            <label for="observacionesEdit"><i class="fas fa-clipboard"></i> Observaciones:</label>
+            <textarea id="observacionesEdit" rows="4" placeholder="Ingrese observaciones del mantenimiento"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="cancel-button" onclick="closeModal('editModal')">Cancelar</button>
+            <button type="submit" class="submit-button">Actualizar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación para Eliminar -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content delete-modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación</h3>
+        <span class="close-modal" onclick="closeModal('deleteModal')">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p>¿Está seguro que desea eliminar este mantenimiento? Esta acción no se puede deshacer.</p>
+        <input type="hidden" id="deleteMantenimientoId">
+        <div class="form-actions">
+          <button type="button" class="cancel-button" onclick="closeModal('deleteModal')">Cancelar</button>
+          <button type="button" class="delete-button" onclick="confirmarEliminar()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast para notificaciones -->
+  <div id="toast" class="toast">
+    <div class="toast-content">
+      <i id="toast-icon" class="fas fa-check-circle"></i>
+      <div class="toast-message" id="toast-message">Operación exitosa</div>
+    </div>
+    <div class="toast-progress"></div>
+  </div>
+
+  <script>
+    const API_URL = "http://localhost/SGIT/api/mantenimiento.php";
+
+    document.addEventListener("DOMContentLoaded", function() {
+      cargarMantenimientos();
+      cargarEquipos();
+      cargarTiposMantenimiento();
+      
+      // Configurar los formularios
+      document.getElementById('addMantenimientoForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        agregarMantenimientoForm();
+      });
+      
+      document.getElementById('editMantenimientoForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        actualizarMantenimientoForm();
+      });
+      
+      // Configurar búsqueda
+      document.getElementById('searchInput').addEventListener('keyup', function() {
+        filtrarTabla();
+      });
+    });
+
+    function cargarMantenimientos() {
+      fetch(API_URL)
+        .then((response) => response.json())
+        .then((data) => {
+          let rows = "";
+          if (data.length === 0) {
+            rows = `<tr><td colspan="7" class="no-data">No hay mantenimientos registrados</td></tr>`;
+          } else {
+            data.forEach((mantenimiento) => {
+              const estado = getEstadoBadge(mantenimiento.Estado);
+              
+              rows += `<tr>
+                <td>${mantenimiento.Id_Mantenimiento}</td>
+                <td>${mantenimiento.Marca_Equipo}</td>
+                <td>${mantenimiento.Fecha_Inicio_mantenimiento}</td>
+                <td>${mantenimiento.Fecha_fin_mantenimiento || 'No definida'}</td>
+                <td>${mantenimiento.Observaciones}</td>
+                <td class="actions-cell">
+                  <button class="action-icon edit-icon" onclick="openEditModal(${mantenimiento.Id_Mantenimiento}, ${mantenimiento.Id_Equipos},'${mantenimiento.Fecha_Inicio_mantenimiento}', '${mantenimiento.Fecha_fin_mantenimiento || ''}','${mantenimiento.Observaciones ? mantenimiento.Observaciones.replace(/'/g, "\\'") : ''}')">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-icon delete-icon" onclick="openDeleteModal(${mantenimiento.Id_Mantenimiento})">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </td>
+              </tr>`;
+            });
+          }
+          document.getElementById("maintenance-entries").innerHTML = rows;
+        })
+        .catch((error) => {
+          document.getElementById("maintenance-entries").innerHTML =
+            '<tr><td colspan="7" class="error-message"><i class="fas fa-exclamation-circle"></i> Error al cargar los datos.</td></tr>';
+          console.error("Error cargando mantenimientos:", error);
+          mostrarToast("Error al cargar los datos", "error");
+        });
+    }
+
+    function cargarEquipos() {
+      fetch("http://localhost/SGIT/api/inventario.php")
+        .then((response) => response.json())
+        .then((data) => {
+          let options = '<option value="">Seleccione un equipo</option>';
+          data.forEach((equipo) => {
+            options += `<option value="${equipo.Id_Equipos}">${equipo.Marca_Equipo}</option>`;
+          });
+          document.getElementById('equipoAdd').innerHTML = options;
+          document.getElementById('equipoEdit').innerHTML = options;
+        })
+        .catch((error) => {
+          console.error("Error cargando equipos:", error);
+          mostrarToast("Error al cargar los equipos", "error");
+        });
+    }
+
+    function getEstadoBadge(estado) {
+      let badgeClass = '';
+      
+      switch(estado) {
+        case 'Pendiente':
+          badgeClass = 'pending';
+          break;
+        case 'En Proceso':
+          badgeClass = 'in-progress';
+          break;
+        case 'Completado':
+          badgeClass = 'completed';
+          break;
+        case 'Cancelado':
+          badgeClass = 'cancelled';
+          break;
+        default:
+          badgeClass = 'default';
+      }
+      
+      return `<span class="status-badge ${badgeClass}">${estado}</span>`;
+    }
+
+    function filtrarTabla() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toUpperCase();
+      const table = document.querySelector('.data-table');
+      const tr = table.getElementsByTagName('tr');
+      
+      for (let i = 1; i < tr.length; i++) { // Empezar desde 1 para saltar el encabezado
+        let visible = false;
+        const td = tr[i].getElementsByTagName('td');
+        
+        for (let j = 0; j < td.length - 1; j++) { // -1 para excluir la columna de acciones
+          const cell = td[j];
+          if (cell) {
+            const txtValue = cell.textContent || cell.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              visible = true;
+              break;
+            }
+          }
+        }
+        
+        tr[i].style.display = visible ? '' : 'none';
+      }
+    }
+
+    // Funciones para modales
+    function openAddModal() {
+      document.getElementById('addMantenimientoForm').reset();
+      // Establecer la fecha de hoy como predeterminada
+      document.getElementById('fechaInicioAdd').valueAsDate = new Date();
+      document.getElementById('addModal').style.display = 'flex';
+    }
+    
+    function openEditModal(id, idEquipo, idTipo, fechaInicio, fechaFin, estado, observaciones) {
+      document.getElementById('mantenimientoId').value = id;
+      document.getElementById('equipoEdit').value = idEquipo;
+      document.getElementById('fechaInicioEdit').value = fechaInicio;
+      document.getElementById('fechaFinEdit').value = fechaFin;
+      document.getElementById('observacionesEdit').value = observaciones;
+      document.getElementById('editModal').style.display = 'flex';
+    }
+    
+    function openDeleteModal(id) {
+      document.getElementById('deleteMantenimientoId').value = id;
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+    
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Cerrar modales al hacer clic fuera de ellos
+    window.onclick = function(event) {
+      const modals = document.getElementsByClassName('modal');
+      for (let i = 0; i < modals.length; i++) {
+        if (event.target == modals[i]) {
+          modals[i].style.display = 'none';
+        }
+      }
+    }
+
+    function agregarMantenimientoForm() {
+      const idEquipo = document.getElementById('equipoAdd').value;
+      const fechaInicio = document.getElementById('fechaInicioAdd').value;
+      const fechaFin = document.getElementById('fechaFinAdd').value;
+      const observaciones = document.getElementById('observacionesAdd').value;
+
+      fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          Id_Equipos: idEquipo,
+          Id_Tipo_Mantenimiento: idTipo,
+          Fecha_Inicio_mantenimiento: fechaInicio,
+          Fecha_fin_mantenimiento: fechaFin || null,
+          Observaciones: observaciones
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        closeModal('addModal');
+        document.getElementById('addMantenimientoForm').reset();
+        mostrarToast(data.message || "Mantenimiento registrado con éxito", data.error ? "error" : "success");
+        cargarMantenimientos();
+      })
+      .catch(error => {
+        console.error("Error agregando mantenimiento:", error);
+        mostrarToast("Error al registrar mantenimiento", "error");
+      });
+    }
+
+    function actualizarMantenimientoForm() {
+      const id = document.getElementById('mantenimientoId').value;
+      const idEquipo = document.getElementById('equipoEdit').value;
+      const fechaInicio = document.getElementById('fechaInicioEdit').value;
+      const fechaFin = document.getElementById('fechaFinEdit').value;
+      const observaciones = document.getElementById('observacionesEdit').value;
+
+      fetch(API_URL, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          Id_Mantenimiento: id,
+          Id_Equipos: idEquipo,
+          Fecha_Inicio_mantenimiento: fechaInicio,
+          Fecha_fin_mantenimiento: fechaFin || null,
+          Observaciones: observaciones
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        closeModal('editModal');
+        mostrarToast(data.message || "Mantenimiento actualizado con éxito", data.error ? "error" : "success");
+        cargarMantenimientos();
+      })
+      .catch(error => {
+        console.error("Error actualizando mantenimiento:", error);
+        mostrarToast("Error al actualizar mantenimiento", "error");
+      });
+    }
+
+    function confirmarEliminar() {
+      const id = document.getElementById('deleteMantenimientoId').value;
+      
+      fetch(API_URL, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ Id_Mantenimiento: id }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        closeModal('deleteModal');
+        mostrarToast(data.message || "Mantenimiento eliminado con éxito", data.error ? "error" : "success");
+        cargarMantenimientos();
+      })
+      .catch(error => {
+        console.error("Error eliminando mantenimiento:", error);
+        mostrarToast("Error al eliminar mantenimiento", "error");
+      });
+    }
+
+    function mostrarToast(mensaje, tipo = "success") {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      const toastIcon = document.getElementById('toast-icon');
+      
+      toastMessage.textContent = mensaje;
+      
+      // Configurar icono y color según el tipo
+      if (tipo === "error") {
+        toast.classList.add('error');
+        toastIcon.className = 'fas fa-exclamation-circle';
+      } else {
+        toast.classList.remove('error');
+        toastIcon.className = 'fas fa-check-circle';
+      }
+      
+      // Mostrar el toast
+      toast.classList.add('show');
+      
+      // Ocultar después de 3 segundos
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function imprimirTabla() {
+      let contenido = document.getElementById("printable").innerHTML;
+      let ventanaImpresion = window.open("", "", "width=800,height=600");
+      ventanaImpresion.document.write(`
+        <html>
+          <head>
+            <title>Imprimir Mantenimientos</title>
+            <link rel="stylesheet" href="css/tablas.css">
+            <style>
+              body { font-family: 'Poppins', sans-serif; padding: 20px; }
+              .data-table { width: 100%; border-collapse: collapse; }
+              .data-table th, .data-table td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+              .data-table th { background-color: #f2f2f2; }
+              .actions-cell { display: none; }
+              .status-badge {
+                padding: 5px 10px;
+                border-radius: 20px;
+                font-size: 0.8em;
+                font-weight: 500;
+              }
+              .pending { background-color: #fff7e6; color: #fa8c16; }
+              .in-progress { background-color: #e6f7ff; color: #0070f3; }
+              .completed { background-color: #d4f7d4; color: #00a854; }
+              .cancelled { background-color: #fff1f0; color: #f5222d; }
+              @media print {
+                body { -webkit-print-color-adjust: exact; }
+                .data-table th { background-color: #f2f2f2 !important; }
+                .pending { background-color: #fff7e6 !important; color: #fa8c16 !important; }
+                .in-progress { background-color: #e6f7ff !important; color: #0070f3 !important; }
+                .completed { background-color: #d4f7d4 !important; color: #00a854 !important; }
+                .cancelled { background-color: #fff1f0 !important; color: #f5222d !important; }
+              }
+            </style>
+          </head>
+          <body>
+            <h1>Registro de Mantenimientos</h1>
+            <p>Fecha de impresión: ${new Date().toLocaleString()}</p>
+            ${contenido}
+          </body>
+        </html>
+      `);
+      ventanaImpresion.document.close();
+      ventanaImpresion.focus();
+      setTimeout(() => {
+        ventanaImpresion.print();
+        ventanaImpresion.close();
+      }, 500);
+    }
+
+    // Funcionalidad para el cambio de tema
+    const themeToggle = document.getElementById("theme-toggle");
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark");
+      themeToggle.checked = true;
+    }
+
+    themeToggle.addEventListener("change", function () {
+      document.body.classList.toggle("dark", this.checked);
+      localStorage.setItem("theme", this.checked ? "dark" : "light");
+    });
+
+    document.addEventListener("DOMContentLoaded", async function () {
+      try {
+        const response = await fetch("obtener_usuario.php");
+        const data = await response.json();
+
+        if (data.error) {
+          console.error("Error:", data.error);
+          return;
+        }
+
+        // Insertar nombre y rol en la interfaz
+        document.querySelector(".user-name").textContent = data.nombre;
+        document.querySelector(".user-role").textContent = `Rol: ${data.nombre_rol} (ID: ${data.id_rol})`;
+        
+        // Inicial de avatar
+        document.querySelector(".user-avatar").textContent = data.nombre.charAt(0).toUpperCase();
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    });
+  </script>
 </body>
 </html>
