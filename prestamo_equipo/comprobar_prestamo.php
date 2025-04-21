@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome para íconos -->
     <script src="https://kit.fontawesome.com/0ddb2275a5.js" crossorigin="anonymous"></script>
+    <!-- Estilo personalizado -->
+    <link rel="stylesheet" href="../css/crud.css">
 </head>
 
 <body>
@@ -63,8 +65,8 @@
 
         <!-- Botones -->
         <div class="d-flex justify-content-between">
-        <a href="../Consultar.html" class="btn btn-secondary">Regresar</a>
-            <a href="../prestamo_equipo/prestamo.php" class="btn btn-primary">Añadir Prestamo</a>
+        <a href="../inicio1.html" class="btn btn-secondary">Regresar</a>
+            <a href="../prestamo equipo/prestamo.php" class="btn btn-primary">Añadir Prestamo</a>
         </div>
     </div>
 
