@@ -1,0 +1,223 @@
+/* Reset global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos generales */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: #fff;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Header */
+header {
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Espaciado inferior del header para evitar que tape el contenido */
+header {
+  margin-bottom: 20px; /* Ajusta este valor según sea necesario */
+}
+
+header .logo h1 {
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+}
+
+nav ul li {
+  margin: 0 20px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 0;
+  position: relative;
+}
+
+nav ul li a:hover {
+  color: #ffd700;
+}
+
+nav ul li a.active {
+  color: #ffd700;
+}
+
+/* Perfil */
+.profile {
+  padding: 20px;
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  box-shadow: var(--card-shadow);
+  text-align: center;
+}
+
+.profile-header {
+  margin-bottom: 40px;
+}
+
+.profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  margin-bottom: 20px;
+}
+
+.profile-header h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.profile-header p {
+  font-size: 1.2rem;
+  color: #ffd700;
+}
+
+.profile-info {
+  margin-bottom: 40px;
+}
+
+.profile-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+input:disabled {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+button.cta-btn {
+  background-color: #2575fc;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+button.cta-btn:hover {
+  background-color: #6a11cb;
+}
+
+/* Tabla de historial de préstamos */
+table {
+  width: 100%;
+  max-width: 1200px; /* Ancho máximo para la tabla */
+  margin: 30px auto; /* Centrar la tabla y margen superior */
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+table th,
+table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #fff;
+}
+
+table th {
+  background-color: #2575fc;
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+table tr:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+footer p {
+  font-size: 1rem;
+}
+
+/* Compatibilidad con el tema oscuro */
+.dark body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.dark .profile {
+  padding-top: 20px;
+}
+
+.dark .profile-header h2,
+.dark .profile-info h3 {
+  color: var(--foreground);
+}
+
+.dark input {
+  background-color: var(--card-bg);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+
+.dark button.cta-btn {
+  background-color: #3b82f6;
+}
+
+.dark button.cta-btn:hover {
+  background-color: #2563eb;
+}
+

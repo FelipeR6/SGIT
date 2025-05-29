@@ -1,0 +1,147 @@
+/* Reset de márgenes y padding por defecto */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body y fondo de la página */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Header */
+header {
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+header .logo h1 {
+  font-size: 24px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+nav a:hover,
+nav a.active {
+  background-color: #3498db;
+}
+
+/* Estilo del contenido de la sección */
+.audit-log {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Título de la sección */
+.audit-log h2 {
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+/* Tabla de auditoría */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table th {
+  background-color: #3498db;
+  color: #fff;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+table button:hover {
+  background-color: #27ae60;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 10px 0;
+  margin-top: 40px;
+}
+
+/* Compatibilidad con el tema oscuro */
+.dark body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.dark .audit-log {
+  background-color: var(--card-bg);
+}
+
+.dark .audit-log h2 {
+  color: var(--foreground);
+}
+
+.dark table th {
+  background-color: #3b82f6;
+}
+
+.dark table td {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.dark table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark table button {
+  background-color: #3b82f6;
+}
+
+.dark table button:hover {
+  background-color: #2563eb;
+}
+

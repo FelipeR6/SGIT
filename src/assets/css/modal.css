@@ -1,0 +1,252 @@
+/* Estilos para modales */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+  overflow: hidden;
+}
+
+.delete-modal {
+  max-width: 400px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--topbar-bg);
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.close-modal {
+  color: var(--muted-foreground);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-modal:hover {
+  color: var(--foreground);
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+/* Estilos para formularios */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--sidebar-hover);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-button,
+.submit-button,
+.delete-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.cancel-button {
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+
+.submit-button {
+  background-color: var(--icon-color-blue);
+  color: white;
+}
+
+.delete-button {
+  background-color: var(--icon-color-red);
+  color: white;
+}
+
+.cancel-button:hover,
+.submit-button:hover,
+.delete-button:hover {
+  transform: translateY(-2px);
+}
+
+.cancel-button:active,
+.submit-button:active,
+.delete-button:active {
+  transform: translateY(0);
+}
+
+/* Toast notifications */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: var(--card-bg);
+  color: var(--foreground);
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1100;
+  overflow: hidden;
+  max-width: 350px;
+  transform: translateY(100px);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.3s, opacity 0.3s, visibility 0.3s;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.toast.error {
+  border-left: 4px solid var(--icon-color-red);
+}
+
+.toast.error .toast-progress {
+  background-color: var(--icon-color-red);
+}
+
+.toast:not(.error) {
+  border-left: 4px solid var(--icon-color-green);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+}
+
+.toast i {
+  font-size: 1.5rem;
+  margin-right: 15px;
+}
+
+.toast:not(.error) i {
+  color: var(--icon-color-green);
+}
+
+.toast.error i {
+  color: var(--icon-color-red);
+}
+
+.toast-message {
+  font-size: 0.95rem;
+}
+
+.toast-progress {
+  height: 4px;
+  background-color: var(--icon-color-green);
+  width: 100%;
+  animation: progress 3s linear forwards;
+}
+
+@keyframes progress {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
+
